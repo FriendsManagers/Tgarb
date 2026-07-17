@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>حرب الفضاء</title>
+    <style>
+        body { margin: 0; background: #000; overflow: hidden; }
+        #game-area { width: 100vw; height: 75vh; position: relative; background: #000; }
+        
+        /* تنسيق الصور */
+        .obj { position: absolute; width: 60px; height: 60px; }
+        .bomb { width: 40px; height: 40px; }
+        #explosion { width: 100px; height: 100px; display: none; position: absolute; z-index: 10; }
+
+        .controls { display: flex; justify-content: space-between; padding: 10px; height: 25vh; align-items: center; }
+        .btn { width: 120px; height: 100px; border: 2px solid white; background: transparent; color: white; font-size: 30px; }
+        .btn:active { background: white; color: black; }
+    </style>
+</head>
+<body>
+
+    <div id="game-area">
+        <img src="pngtree-colorful-toy-rocket-ship-close-up-png-image_19054213.webp" id="player" class="obj" style="bottom: 20px; left: 50%;">
+        <img src="pngtree-colorful-toy-spacecraft-model-image-png-image_19471246.webp" id="enemy" class="obj" style="top: 10px; left: 50%;">
+        <img src="pngtree-nuclear-bomb-explosion-png-image_13017489.png" id="explosion">
+    </div>
+
+    <div class="controls">
+        <button class="btn" onmousedown="startMove('left')" onmouseup="stopMove()" ontouchstart="startMove('left')" ontouchend="stopMove()">◀</button>
+        <button class="btn" onmousedown="startMove('right')" onmouseup="stopMove()" ontouchstart="startMove('right')" ontouchend="stopMove()">▶</button>
+    </div>
+
+    <script>
+        let player = document.getElementById('player');
+        let enemy = document.getElementById('enemy');
+        let explosion = document.getElementById('explosion');
+        let playerPos = 50, enemyPos = 50, moveDir = null;
+
+        function startMove(dir) { moveDir = dir; }
+        function stopMove() { moveDir = null; }
+
+        function gameLoop() {
+            if (moveDir === 'left' && playerPos > 0) playerPos -= 1.5;
+            if (moveDir === 'right' && playerPos < 90) playerPos += 1.5;
+            player.style.left = playerPos + '%';
+            
+            // العدو يتبع اللاعب
+            enemyPos += (playerPos - enemyPos) * 0.05;
+            enemy.style.left = enemyPos + '%';
+            requestAnimationFrame(gameLoop);
+        }
+
+        function fire() {
+            let bomb = document.createElement('img');
+            bomb.src = 'pngtree-nuclear-bomb-icon-png-image_4485470.png';
+            bomb.className = 'bomb obj';
+            bomb.style.left = enemyPos + '%';
+            bomb.style.top = '70px';
+            document.getElementById('game-area').appendChild(bomb);
+
+            let bTop = 70;
+            let fall = setInterval(() => {
+                bTop += 5;
+                bomb.style.top = bTop + 'px';
+                
+                let pRect = player.getBoundingClientRect();
+                let bRect = bomb.getBoundingClientRect();
+                if (bRect.bottom > pRect.top && bRect.left < pRect.right && bRect.right > pRect.left) {
+                    // إظهار الانفجار
+                    explosion.style.left = player.style.left;
+                    explosion.style.top = (window.innerHeight * 0.6) + 'px';
+                    explosion.style.display = 'block';
+                    clearInterval(fall);
+                    setTimeout(() => location.reload(), 1000);
+                }
+                if (bTop > window.innerHeight) { bomb.remove(); clearInterval(fall); }
+            }, 20);
+        }
+
+        setInterval(fire, 800);
+        gameLoop();
+    </script>
+</body>
+</html>
