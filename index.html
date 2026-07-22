@@ -71,7 +71,6 @@
             border-bottom: 2px solid #f1f5f9;
         }
 
-        /* نظام الشبكة الديناميكي (اثنين تحت بعض للزوجي، وفردي يتكيف بذكاء) */
         .form-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -91,7 +90,6 @@
                 gap: 15px; 
             }
             
-            /* الكلاس الخاص بجعل العنصر يأخذ عرض السطر كاملاً عند الحاجة */
             .form-group.full-width {
                 grid-column: span 2;
             }
@@ -388,10 +386,26 @@
             display: none;
         }
 
+        /* تنسيق الطباعة الدقيق لحفظ PDF بلا صفحات فارغة */
         @media print {
-            body { background-color: white; padding: 0; }
-            .card:not(:last-child), header, .btn, .alert, .zoom-controls, .preview-container-wrapper { display: none; }
-            .preview-box { transform: scale(1) !important; box-shadow: none; border: none; width: 100%; padding: 0; margin: 0; }
+            body * {
+                visibility: hidden;
+            }
+            #printableArea, #printableArea * {
+                visibility: visible;
+            }
+            #printableArea {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                transform: scale(1) !important;
+                box-shadow: none !important;
+                border: none !important;
+                margin: 0 !important;
+                padding: 10px !important;
+                background: white !important;
+            }
         }
     </style>
 </head>
@@ -440,7 +454,7 @@
     </div>
 
     <div class="card">
-        <h2>معاينة المستند النهائي (قابلة للتحكم والزوم)</h2>
+        <!-- تم إزالة نص معاينة المستند النهائي من هنا بناءً على طلبك -->
         
         <div class="zoom-controls">
             <button type="button" class="zoom-btn" onclick="zoomIn()">➕ تكبير (Zoom In)</button>
@@ -483,7 +497,7 @@
                 <div id="scopeSectionWrapper">
                     <div class="section-title" id="scopeTitle">أولاً: نطاق وخطوات العمل والمواصفات الفنية</div>
                     <div style="font-size: 13px; margin-bottom: 12px; white-space: pre-line; line-height: 1.6;" id="prevTableDesc">
-1- تنظيف السطح: تنظيف كامل السطح من الأتربة والشواءب لضمان جودة الالتصاق.
+1- تنظيف السطح: تنظيف كامل السطح من الأتربة والشوائب لضمان جودة الالتصاق.
 2- الطبقة الأولى: تنفيذ طبقة أولى من مادة عزل الفوم بولي يوريثان.
 3- الطبقة الثانية: تنفيذ طبقة ثانية من مادة عزل الفوم لضمان التغطية والسماكة المطلوبة.
 4- طبقة الحماية: تنفيذ طبقة نهائية من مادة الإكريليك لحماية العزل من العوامل الجوية.
@@ -615,7 +629,6 @@
         box.style.transform = `scale(${currentZoom})`;
     }
 
-    // دالة تنظيم الحانات بذكاء: لو العدد فردي، نجعل العنصر الأخير يأخذ عرض كامل السطر (full-width)
     function renderSmartGrid(containerId, fields) {
         const container = document.getElementById(containerId);
         container.innerHTML = '';
@@ -625,7 +638,6 @@
             const div = document.createElement('div');
             div.className = 'form-group';
             
-            // إذا كان العنصر مطلوب جعله كاملاً، أو كان العدد فردياً والعنصر الأخير
             if (field.fullWidth || (total % 2 !== 0 && index === total - 1)) {
                 div.classList.add('full-width');
             }
@@ -645,10 +657,10 @@
 
     function loadCompanyFields() {
         const fields = [
-            { label: 'اسم الشركة أو المؤسسة', id: 'compName', placeholder: 'اتركه فارغاً ليختفي تماماً...' },
-            { label: 'رقم السجل التجاري', id: 'compReg', placeholder: 'اتركه فارغاً ليختفي تماماً...' },
-            { label: 'نشاط الشركة / التخصصات الفرعية', id: 'compActivity', placeholder: 'اتركه فارغاً ليختفي تماماً...' },
-            { label: 'المدينة / الفرع', id: 'compCity', placeholder: 'اتركه فارغاً ليختفي تماماً...' },
+            { label: 'اسم الشركة أو المؤسسة', id: 'compName' },
+            { label: 'رقم السجل التجاري', id: 'compReg' },
+            { label: 'نشاط الشركة / التخصصات الفرعية', id: 'compActivity' },
+            { label: 'المدينة / الفرع', id: 'compCity' },
             { label: 'شعار الشركة (Logo)', id: 'compLogo', type: 'file' },
             { label: 'ختم وتوقيع المؤسسة', id: 'compStamp', type: 'file' }
         ];
@@ -664,23 +676,23 @@
                 <option value="عقد اتفاق" ${docType==='عقد اتفاق'?'selected':''}>عقد اتفاق</option>
                 <option value="شهادة ضمان" ${docType==='شهادة ضمان'?'selected':''}>شهادة ضمان</option>
             `},
-            { label: 'اسم العميل (المستفيد)', id: 'clientName', placeholder: 'اتركه فارغاً ليختفي تماماً...' },
-            { label: 'رقم الهوية / السجل للعميل', id: 'clientIdNum', placeholder: 'اتركه فارغاً ليختفي تماماً...' },
-            { label: 'اسم المشروع / وصف عام', id: 'projectName', placeholder: 'اتركه فارغاً ليختفي تماماً...' },
-            { label: 'موقع المشروع / المدينة', id: 'projectLocation', placeholder: 'اتركه فارغاً ليختفي تماماً...' },
+            { label: 'اسم العميل (المستفيد)', id: 'clientName' },
+            { label: 'رقم الهوية / السجل للعميل', id: 'clientIdNum' },
+            { label: 'اسم المشروع / وصف عام', id: 'projectName' },
+            { label: 'موقع المشروع / المدينة', id: 'projectLocation' },
             { label: 'تاريخ المستند', id: 'quoteDate', type: 'date' }
         ];
 
         if (docType === 'شهادة ضمان') {
-            fields.push({ label: 'رقم قطعة الأرض / المخطط', id: 'plotNum', placeholder: 'اتركه فارغاً ليختفي تماماً...' });
+            fields.push({ label: 'رقم قطعة الأرض / المخطط', id: 'plotNum' });
         } else {
             fields.push(
                 { label: 'المساحة الإجمالية (بالمتر المربع)', id: 'projectArea', type: 'number', required: true, placeholder: 'أدخل المساحة الإجمالية (إجباري)...' },
                 { label: 'سعر المتر (ر.س)', id: 'meterPrice', type: 'number', required: true, placeholder: 'أدخل سعر المتر (إجباري)...' },
-                { label: 'مدة التنفيذ (أيام عمل)', id: 'execDays', placeholder: 'اتركه فارغاً ليختفي تماماً...' },
-                { label: 'نظام وطريقة السداد (الدفعات)', id: 'paymentTermsInput', type: 'textarea', rows: 3, fullWidth: true, placeholder: 'اتركه فارغاً ليختفي تماماً...', value: document.getElementById('paymentTermsInput') ? document.getElementById('paymentTermsInput').value : `- 50% دفعة مقدمة عند التعاقد.\n- 25% عند الانتهاء من 50% من الأعمال.\n- 10% عند الانتهاء من 75% من الأعمال.\n- 15% عند الانتهاء الكامل من الأعمال وتسليم المشروع.` },
+                { label: 'مدة التنفيذ (أيام عمل)', id: 'execDays' },
+                { label: 'نظام وطريقة السداد (الدفعات)', id: 'paymentTermsInput', type: 'textarea', rows: 3, fullWidth: true, value: document.getElementById('paymentTermsInput') ? document.getElementById('paymentTermsInput').value : `- 50% دفعة مقدمة عند التعاقد.\n- 25% عند الانتهاء من 50% من الأعمال.\n- 10% عند الانتهاء من 75% من الأعمال.\n- 15% عند الانتهاء الكامل من الأعمال وتسليم المشروع.` },
                 { label: 'نطاق وخطوات العمل والمواصفات الفنية', id: 'projectDesc', type: 'textarea', rows: 6, fullWidth: true, value: document.getElementById('projectDesc') ? document.getElementById('projectDesc').value : `1- تنظيف السطح: تنظيف كامل السطح من الأتربة والشوائب لضمان جودة الالتصاق.\n2- الطبقة الأولى: تنفيذ طبقة أولى من مادة عزل الفوم بولي يوريثان.\n3- الطبقة الثانية: تنفيذ طبقة ثانية من مادة عزل الفوم لضمان التغطية والسماكة المطلوبة.\n4- طبقة الحماية: تنفيذ طبقة نهائية من مادة الإكريليك لحماية العزل من العوامل الجوية.\n5- يتم تقديم ضمان 10 سنوات.` },
-                { label: 'ملاحظات إضافية (اختياري)', id: 'projectNotes', type: 'textarea', rows: 2, fullWidth: true, placeholder: 'اتركه فارغاً ليختفي تماماً...', value: document.getElementById('projectNotes') ? document.getElementById('projectNotes').value : '' }
+                { label: 'ملاحظات إضافية (اختياري)', id: 'projectNotes', type: 'textarea', rows: 2, fullWidth: true, value: document.getElementById('projectNotes') ? document.getElementById('projectNotes').value : '' }
             );
         }
 
