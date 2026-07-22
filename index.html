@@ -442,7 +442,6 @@
         </form>
     </div>
 
-    <!-- إدخال تفاصيل المشروع والمستند (خانات خالية تماماً ومزودة بـ Placeholder فقط كما طلبت) -->
     <div class="card">
         <h2>إنشاء وتخصيص المستند الجديد</h2>
         <div class="form-grid">
@@ -456,31 +455,31 @@
             </div>
             <div class="form-group">
                 <label>اسم العميل (المستفيد)</label>
-                <input type="text" id="clientName" placeholder="مثال: Mohamed Red">
+                <input type="text" id="clientName" placeholder="اتركه فارغاً ليختفي تماماً...">
             </div>
             <div class="form-group" id="clientIdGroup">
                 <label>رقم الهوية / السجل للعميل</label>
-                <input type="text" id="clientIdNum" placeholder="123456789">
+                <input type="text" id="clientIdNum" placeholder="اتركه فارغاً ليختفي تماماً...">
             </div>
             <div class="form-group">
                 <label>اسم المشروع / وصف عام</label>
-                <input type="text" id="projectName" placeholder="مثال: عزل أسطح">
+                <input type="text" id="projectName" placeholder="اتركه فارغاً ليختفي تماماً...">
             </div>
             <div class="form-group">
                 <label>موقع المشروع / المدينة</label>
-                <input type="text" id="projectLocation" placeholder="Riyadh / الرياض">
+                <input type="text" id="projectLocation" placeholder="اتركه فارغاً ليختفي تماماً...">
             </div>
             <div class="form-group" id="plotNumGroup" style="display:none;">
                 <label>رقم قطعة الأرض / المخطط (لشهادة الضمان فقط)</label>
-                <input type="text" id="plotNum" placeholder="مثال: 766">
+                <input type="text" id="plotNum" placeholder="اتركه فارغاً ليختفي تماماً...">
             </div>
-            <div class="form-group">
+            <div class="form-group" id="areaGroupWrapper">
                 <label>المساحة الإجمالية (بالمتر المربع)</label>
-                <input type="number" id="projectArea" placeholder="250">
+                <input type="number" id="projectArea" placeholder="اتركه فارغاً ليختفي تماماً..." value="">
             </div>
-            <div class="form-group">
+            <div class="form-group" id="meterPriceGroupWrapper">
                 <label>سعر المتر (ر.س)</label>
-                <input type="number" id="meterPrice" placeholder="20">
+                <input type="number" id="meterPrice" placeholder="اتركه فارغاً ليختفي تماماً..." value="">
             </div>
             <div class="form-group">
                 <label>تاريخ المستند</label>
@@ -488,9 +487,9 @@
             </div>
             <div class="form-group" id="execDaysGroup">
                 <label>مدة التنفيذ (أيام عمل)</label>
-                <input type="text" id="execDays" placeholder="مثال: 5 أيام عمل">
+                <input type="text" id="execDays" placeholder="اتركه فارغاً ليختفي تماماً...">
             </div>
-            <div class="form-group" style="grid-column: 1 / -1;">
+            <div class="form-group" id="descGroupWrapper" style="grid-column: 1 / -1;">
                 <label>نطاق وخطوات العمل (البند / التفاصيل الفنية)</label>
                 <textarea id="projectDesc" rows="6">1- تنظيف السطح: تنظيف كامل السطح من الأتربة والشوائب لضمان جودة الالتصاق.
 2- الطبقة الأولى: تنفيذ طبقة أولى من مادة عزل الفوم بولي يوريثان.
@@ -509,10 +508,9 @@
             <label for="taxCheckbox">إضافة ضريبة القيمة المضافة (15% - شامل السعر أو مضاف)</label>
         </div>
 
-        <button type="button" class="btn btn-ai" onclick="generateAIProposal()">توليد وتحديث تفاصيل العمل بالذكاء الاصطناعي</button>
+        <button type="button" class="btn btn-ai" id="aiBtn" onclick="generateAIProposal()">توليد وتحديث تفاصيل العمل بالذكاء الاصطناعي</button>
     </div>
 
-    <!-- المعاينة الاحترافية مع ميزة إخفاء الحانات الفارغة تماماً وترتيب الـ Grid تلقائياً -->
     <div class="card">
         <h2>معاينة المستند النهائي (قابلة للتحكم والزوم)</h2>
         
@@ -538,16 +536,15 @@
 
                 <div class="doc-title-banner" id="prevDocTitleBanner">عرض سعر</div>
 
-                <!-- شبكة بيانات المستند تتكيف وتخفي أي سطر فارغ تماماً -->
                 <div class="invoice-meta" id="invoiceMetaBox">
-                    <div id="metaCol1" style="display: flex; flexDirection: column; gap: 4px;">
-                        <p id="lineClient" style="display:none;"><strong>مقدم إلى السيد:</strong> <span id="prevClient"></span> المحترم،,,</p>
+                    <div id="metaCol1" style="display: flex; flex-direction: column; gap: 4px;">
+                        <p id="lineClient" style="display:none;"><strong>مقدم إلى السيد:</strong> <span id="prevClient"></span> المحترم،</p>
                         <p id="lineClientId" style="display:none;"><strong>رقم الهوية:</strong> <span id="prevClientId"></span></p>
                         <p id="lineProjectName" style="display:none;"><strong>المشروع:</strong> <span id="prevProjectName"></span></p>
                         <p id="lineLocation" style="display:none;"><strong>الموقع:</strong> <span id="prevLocation"></span></p>
                         <p id="linePlot" style="display:none;"><strong>رقم القطعة / المخطط:</strong> <span id="prevPlotNum"></span></p>
                     </div>
-                    <div id="metaCol2" style="display: flex; flexDirection: column; gap: 4px;">
+                    <div id="metaCol2" style="display: flex; flex-direction: column; gap: 4px;">
                         <p id="lineDate" style="display:none;"><strong>التاريخ:</strong> <span id="prevDate"></span></p>
                         <p id="lineArea" style="display:none;"><strong>مساحة المشروع:</strong> <span id="prevArea"></span> م²</p>
                         <p id="lineMeterPrice" style="display:none;"><strong>سعر المتر:</strong> <span id="prevMeterPrice"></span> ر.س</p>
@@ -555,13 +552,15 @@
                     </div>
                 </div>
 
-                <div class="section-title" id="scopeTitle">أولاً: نطاق وخطوات العمل والمواصفات الفنية</div>
-                <div style="font-size: 13px; margin-bottom: 12px; white-space: pre-line; line-height: 1.6;" id="prevTableDesc">
-1- تنظيف السطح: تنظيف كامل السطح من الأتربة والشوائب لضمان جودة الالتصاق.
+                <div id="scopeSectionWrapper">
+                    <div class="section-title" id="scopeTitle">أولاً: نطاق وخطوات العمل والمواصفات الفنية</div>
+                    <div style="font-size: 13px; margin-bottom: 12px; white-space: pre-line; line-height: 1.6;" id="prevTableDesc">
+1- تنظيف السطح: تنظيف كامل السطح من الأتربة والشواءب لضمان جودة الالتصاق.
 2- الطبقة الأولى: تنفيذ طبقة أولى من مادة عزل الفوم بولي يوريثان.
 3- الطبقة الثانية: تنفيذ طبقة ثانية من مادة عزل الفوم لضمان التغطية والسماكة المطلوبة.
 4- طبقة الحماية: تنفيذ طبقة نهائية من مادة الإكريليك لحماية العزل من العوامل الجوية.
 5- يتم تقديم ضمان 10 سنوات.
+                    </div>
                 </div>
 
                 <div id="notesContainer" style="display:none; margin-bottom: 12px;">
@@ -569,45 +568,47 @@
                     <div style="font-size: 13px; white-space: pre-line; background: #f8fafc; padding: 8px; border-radius: 6px; border: 1px dashed var(--border-color);" id="prevNotesText"></div>
                 </div>
 
-                <div class="section-title" id="financialTitle">ثانياً: التفاصيل المالية وجدول الأسعار</div>
-                <div style="width: 100%; overflow-x: auto; margin-bottom: 15px;" id="financialTableWrapper">
-                    <table class="items-table">
-                        <thead>
-                            <tr>
-                                <th>م</th>
-                                <th>بيان الأعمال والمواد المستخدمة</th>
-                                <th>الوحدة</th>
-                                <th>الكمية / المساحة</th>
-                                <th>سعر المتر</th>
-                                <th>الإجمالي الفرعي (ر.س)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td><span id="tableItemDesc">تنفيذ أعمال عزل الأسطح المتفق عليها</span></td>
-                                <td>م²</td>
-                                <td><span id="prevAreaTable">250</span></td>
-                                <td><span id="prevMeterTable">20</span> ر.س</td>
-                                <td><span id="subTotalText">0.00</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <div id="financialSectionWrapper">
+                    <div class="section-title" id="financialTitle">ثانياً: التفاصيل المالية وجدول الأسعار</div>
+                    <div style="width: 100%; overflow-x: auto; margin-bottom: 15px;" id="financialTableWrapper">
+                        <table class="items-table">
+                            <thead>
+                                <tr>
+                                    <th>م</th>
+                                    <th>بيان الأعمال والمواد المستخدمة</th>
+                                    <th>الوحدة</th>
+                                    <th>الكمية / المساحة</th>
+                                    <th>سعر المتر</th>
+                                    <th>الإجمالي الفرعي (ر.س)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td><span id="tableItemDesc">تنفيذ أعمال عزل الأسطح المتفق عليها</span></td>
+                                    <td>م²</td>
+                                    <td><span id="prevAreaTable">0</span></td>
+                                    <td><span id="prevMeterTable">0</span> ر.س</td>
+                                    <td><span id="subTotalText">0.00</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-                <div class="totals-section" id="totalsSectionBox">
-                    <div class="totals-box">
-                        <div class="totals-row">
-                            <span>المجموع الفرعي:</span>
-                            <span id="subTotal">0.00 ر.س</span>
-                        </div>
-                        <div class="totals-row" id="taxRow">
-                            <span>ضريبة القيمة المضافة (15%):</span>
-                            <span id="taxTotal">0.00 ر.س</span>
-                        </div>
-                        <div class="totals-row final">
-                            <span>الإجمالي الشامل:</span>
-                            <span id="grandTotal">0.00 ر.س</span>
+                    <div class="totals-section" id="totalsSectionBox">
+                        <div class="totals-box">
+                            <div class="totals-row">
+                                <span>المجموع الفرعي:</span>
+                                <span id="subTotal">0.00 ر.س</span>
+                            </div>
+                            <div class="totals-row" id="taxRow">
+                                <span>ضريبة القيمة المضافة (15%):</span>
+                                <span id="taxTotal">0.00 ر.س</span>
+                            </div>
+                            <div class="totals-row final">
+                                <span>الإجمالي الشامل:</span>
+                                <span id="grandTotal">0.00 ر.س</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -788,7 +789,6 @@
         setTimeout(() => { alertBox.style.display = 'none'; }, 3000);
     }
 
-    // دالة فحص وتحديث ظهور الحقول الفارغة في معاينة المستند لتختفي تماماً وتتكدس مكأنها
     function updateMetaVisibility() {
         const clientVal = document.getElementById('clientName').value.trim();
         const clientIdVal = document.getElementById('clientIdNum').value.trim();
@@ -813,10 +813,7 @@
 
         // سطر رقم الهوية
         const lineClientId = document.getElementById('lineClientId');
-        if(clientIdVal !== '' && docType !== 'شهادة ضمان') {
-            lineClientId.style.display = 'block';
-            document.getElementById('prevClientId').innerText = clientIdVal;
-        } else if(docType === 'شهادة ضمان' && clientIdVal !== '') {
+        if(clientIdVal !== '') {
             lineClientId.style.display = 'block';
             document.getElementById('prevClientId').innerText = clientIdVal;
         } else {
@@ -841,7 +838,7 @@
             lineLocation.style.display = 'none';
         }
 
-        // سطر القطعة والمخطط (خاص بشهادة الضمان وفقط لو تم إدخاله)
+        // سطر القطعة والمخطط
         const linePlot = document.getElementById('linePlot');
         if(docType === 'شهادة ضمان' && plotVal !== '') {
             linePlot.style.display = 'block';
@@ -888,7 +885,6 @@
             lineExecDays.style.display = 'none';
         }
 
-        // إخفاء صندوق الـ Meta بالكامل لو كل محتوياته أصبحت مخفية
         const invoiceMetaBox = document.getElementById('invoiceMetaBox');
         const hasAnyVisibleMeta = (clientVal !== '' || clientIdVal !== '' || projectVal !== '' || locationVal !== '' || (docType === 'شهادة ضمان' && plotVal !== '') || dateVal || (areaVal !== '' && docType !== 'شهادة ضمان') || (meterPriceVal !== '' && docType !== 'شهادة ضمان') || (execDaysVal !== '' && docType !== 'شهادة ضمان'));
         
@@ -904,35 +900,41 @@
         document.getElementById('prevDocTitleBanner').innerText = docType;
         
         const warrantyContainer = document.getElementById('warrantyTermsContainer');
-        const financialTitle = document.getElementById('financialTitle');
-        const financialTableWrapper = document.getElementById('financialTableWrapper');
-        const totalsSectionBox = document.getElementById('totalsSectionBox');
+        const financialSectionWrapper = document.getElementById('financialSectionWrapper');
+        const scopeSectionWrapper = document.getElementById('scopeSectionWrapper');
         const dynamicExtraSection = document.getElementById('dynamicExtraSection');
         const taxGroupContainer = document.getElementById('taxGroupContainer');
-        const clientIdGroup = document.getElementById('clientIdGroup');
         const plotNumGroup = document.getElementById('plotNumGroup');
         const execDaysGroup = document.getElementById('execDaysGroup');
+        const areaGroupWrapper = document.getElementById('areaGroupWrapper');
+        const meterPriceGroupWrapper = document.getElementById('meterPriceGroupWrapper');
+        const descGroupWrapper = document.getElementById('descGroupWrapper');
+        const aiBtn = document.getElementById('aiBtn');
 
         if (docType === 'شهادة ضمان') {
             warrantyContainer.style.display = 'block';
-            financialTitle.style.display = 'none';
-            financialTableWrapper.style.display = 'none';
-            totalsSectionBox.style.display = 'none';
+            financialSectionWrapper.style.display = 'none';
+            scopeSectionWrapper.style.display = 'none';
             dynamicExtraSection.style.display = 'none';
             taxGroupContainer.style.display = 'none';
-            clientIdGroup.style.display = 'block';
             plotNumGroup.style.display = 'block';
             execDaysGroup.style.display = 'none';
+            areaGroupWrapper.style.display = 'none';
+            meterPriceGroupWrapper.style.display = 'none';
+            descGroupWrapper.style.display = 'none';
+            aiBtn.style.display = 'none';
         } else if (docType === 'عقد اتفاق') {
             warrantyContainer.style.display = 'none';
-            financialTitle.style.display = 'block';
-            financialTableWrapper.style.display = 'block';
-            totalsSectionBox.style.display = 'flex';
+            financialSectionWrapper.style.display = 'block';
+            scopeSectionWrapper.style.display = 'block';
             dynamicExtraSection.style.display = 'block';
             taxGroupContainer.style.display = 'flex';
-            clientIdGroup.style.display = 'block';
             plotNumGroup.style.display = 'none';
             execDaysGroup.style.display = 'block';
+            areaGroupWrapper.style.display = 'block';
+            meterPriceGroupWrapper.style.display = 'block';
+            descGroupWrapper.style.display = 'block';
+            aiBtn.style.display = 'block';
             
             dynamicExtraSection.innerHTML = `
                 <div class="section-title">ثالثاً: نظام وطريقة السداد ودفعات المستحقات</div>
@@ -945,14 +947,16 @@
             `;
         } else {
             warrantyContainer.style.display = 'none';
-            financialTitle.style.display = 'block';
-            financialTableWrapper.style.display = 'block';
-            totalsSectionBox.style.display = 'flex';
+            financialSectionWrapper.style.display = 'block';
+            scopeSectionWrapper.style.display = 'block';
             dynamicExtraSection.style.display = 'block';
             taxGroupContainer.style.display = 'flex';
-            clientIdGroup.style.display = 'block';
             plotNumGroup.style.display = 'none';
             execDaysGroup.style.display = 'block';
+            areaGroupWrapper.style.display = 'block';
+            meterPriceGroupWrapper.style.display = 'block';
+            descGroupWrapper.style.display = 'block';
+            aiBtn.style.display = 'block';
 
             const execDaysVal = document.getElementById('execDays').value || '5 أيام عمل';
 
@@ -967,7 +971,6 @@
         updateMetaVisibility();
     }
 
-    // الاستماع لجميع الحقول لتحديث الحذف الديناميكي التلقائي
     document.getElementById('clientName').addEventListener('input', updateMetaVisibility);
     document.getElementById('clientIdNum').addEventListener('input', updateMetaVisibility);
     document.getElementById('projectName').addEventListener('input', updateMetaVisibility);
