@@ -201,7 +201,7 @@
             background: #1e293b;
         }
 
-        /* معاينة المستند */
+        /* معاينة المستند (مصغرة افتراضياً لتناسب الشاشة بالكامل) */
         .preview-box {
             background: white;
             border: 1px solid var(--border-color);
@@ -333,29 +333,6 @@
             font-size: 15px;
         }
 
-        .editable-field {
-            border: 1px dashed transparent;
-            background: transparent;
-            padding: 2px 4px;
-            border-radius: 4px;
-            transition: all 0.2s;
-            width: 100%;
-            font-family: inherit;
-            font-size: inherit;
-            color: inherit;
-        }
-
-        .editable-field:hover, .editable-field:focus {
-            border-color: var(--secondary);
-            background: #fff;
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(13, 148, 136, 0.1);
-        }
-
-        textarea.editable-field {
-            resize: vertical;
-        }
-
         .terms-list {
             font-size: 12px;
             color: #334155;
@@ -407,19 +384,18 @@
             body { background-color: white; padding: 0; }
             .card:not(:last-child), header, .btn, .alert, .zoom-controls, .preview-container-wrapper { display: none; }
             .preview-box { transform: scale(1) !important; box-shadow: none; border: none; width: 100%; padding: 0; margin: 0; }
-            .editable-field { border: none !important; background: transparent !important; padding: 0 !important; }
         }
     </style>
 </head>
 <body>
 
-<!-- ترويع توقيع المبرمج في أول الصفحة باللغتين الإنجليزية ثم العربية -->
-<div style="background: #0f172a; color: #38bdf8; text-align: center; padding: 12px; font-size: 13px; font-weight: bold; border-bottom: 2px solid var(--secondary);">
-    <div>Created by Eng. Mohamed Abu El-Kheir</div>
-    <div style="font-size: 12px; color: #e2e8f0; margin-top: 2px;">تم الإنشاء بواسطة المهندس / محمد أبو الخير</div>
-</div>
+<div class="container">
+    <!-- توقيع المطور في أول الموقع كما طلبت (إنجليزي ثم عربي) -->
+    <div style="text-align: center; padding: 8px; font-size: 12px; font-weight: bold; color: var(--primary); background: #e0f2fe; border-radius: 8px; margin-bottom: 10px;">
+        <div>Created by Eng. Mohamed Abu El-Kheir</div>
+        <div>تم الإنشاء بواسطة المهندس / محمد أبو الخير</div>
+    </div>
 
-<div class="container" style="margin-top: 15px;">
     <header>
         <h1>منصة إدارة المقاولات وعروض الأسعار الذكية</h1>
         <p>نظام شامل لإنشاء عروض الأسعار، عقود الاتفاق، وشهادات الضمان للمقاولات</p>
@@ -471,7 +447,7 @@
         </form>
     </div>
 
-    <!-- إدخال تفاصيل المشروع والمستند -->
+    <!-- إدخال تفاصيل المشروع والمستند (بدون قيم افتراضية داخل الخانات عدا الاسم) -->
     <div class="card">
         <h2>إنشاء وتخصيص المستند الجديد</h2>
         <div class="form-grid">
@@ -485,31 +461,32 @@
             </div>
             <div class="form-group">
                 <label>اسم العميل (المستفيد)</label>
-                <input type="text" id="clientName" value="محمد مخفور بشر اليامي" placeholder="اسم العميل">
+                <!-- اسم العميل محتفظ بقيمته الافتراضية كما طلبت -->
+                <input type="text" id="clientName" value="محمد مخفور بشر اليامي" placeholder="مثال: محمد مخفور بشر اليامي">
             </div>
             <div class="form-group" id="clientIdGroup">
                 <label>رقم الهوية / السجل للعميل</label>
-                <input type="text" id="clientIdNum" value="1057713867" placeholder="رقم الهوية">
+                <input type="text" id="clientIdNum" value="" placeholder="مثال: 1057713867">
             </div>
             <div class="form-group">
                 <label>اسم المشروع / وصف عام</label>
-                <input type="text" id="projectName" value="عزل فوم لسطح الخاص بمول رويال سنتر" placeholder="اسم المشروع">
+                <input type="text" id="projectName" value="" placeholder="مثال: عزل فوم لسطح الخاص بمول رويال سنتر">
             </div>
             <div class="form-group">
                 <label>موقع المشروع / المدينة</label>
-                <input type="text" id="projectLocation" value="نجران" placeholder="الموقع">
+                <input type="text" id="projectLocation" value="" placeholder="مثال: نجران">
             </div>
-            <div class="form-group" id="plotNumGroup">
-                <label>رقم قطعة الأرض / المخطط (اختياري)</label>
-                <input type="text" id="plotNum" value="قطعة: 1/21/766 - مخطط: 3020" placeholder="رقم القطعة">
+            <div class="form-group" id="plotNumGroup" style="display:none;">
+                <label>رقم قطعة الأرض / المخطط (لشهادة الضمان فقط)</label>
+                <input type="text" id="plotNum" value="" placeholder="مثال: قطعة: 1/21/766 - مخطط: 3020">
             </div>
             <div class="form-group">
                 <label>المساحة الإجمالية (بالمتر المربع)</label>
-                <input type="number" id="projectArea" value="14000" placeholder="المساحة">
+                <input type="number" id="projectArea" value="" placeholder="مثال: 14000">
             </div>
             <div class="form-group">
                 <label>سعر المتر (ر.س)</label>
-                <input type="number" id="meterPrice" value="33" placeholder="سعر المتر">
+                <input type="number" id="meterPrice" value="" placeholder="مثال: 33">
             </div>
             <div class="form-group">
                 <label>تاريخ المستند</label>
@@ -517,15 +494,11 @@
             </div>
             <div class="form-group" id="execDaysGroup">
                 <label>مدة التنفيذ (أيام عمل)</label>
-                <input type="text" id="execDays" value="25 يوم عمل">
+                <input type="text" id="execDays" value="" placeholder="مثال: 25 يوم عمل">
             </div>
             <div class="form-group" style="grid-column: 1 / -1;">
                 <label>نطاق وخطوات العمل (البند / التفاصيل الفنية)</label>
-                <textarea id="projectDesc" rows="4">إزالة الأجزاء المتضررة من العزل القديم ومعالجة السطح.
-رش فوم في الأماكن المتضررة لرفع منسوب السمك وتسوية السطح.
-رش فوم بولي يوريثان بسمك (٤ سم) لكامل مساحة السطح.
-دهان طبقة حماية من مادة الإكريليك عالية الجودة.
-منح ضمان لمدة ١٥ عاماً موثق من الغرفة التجارية.</textarea>
+                <textarea id="projectDesc" rows="4" placeholder="أدخل تفاصيل وبنود العمل هنا..."></textarea>
             </div>
         </div>
         
@@ -538,9 +511,9 @@
         <button type="button" class="btn btn-ai" onclick="generateAIProposal()">توليد وتحديث تفاصيل العمل بالذكاء الاصطناعي</button>
     </div>
 
-    <!-- المعاينة الاحترافية مع زوم وتصغير ملائم للجوال وإمكانية التعديل المباشر -->
+    <!-- المعاينة الاحترافية مع زوم وتصغير ملائم للجوال -->
     <div class="card">
-        <h2>معاينة المستند النهائي (قابلة للتعديل المباشر والتحكم بالزوم)</h2>
+        <h2>معاينة المستند النهائي (قابلة للتحكم والزوم)</h2>
         
         <!-- أزرار التحكم في الزوم للجوال -->
         <div class="zoom-controls">
@@ -567,27 +540,26 @@
 
                 <div class="invoice-meta" id="invoiceMetaBox">
                     <div>
-                        <p><strong>مقدم إلى السيد:</strong> <input type="text" id="prevClient" class="editable-field" value="محمد مخفور بشر اليامي" /> المحترم،,,</p>
-                        <p id="prevClientIdContainer"><strong>رقم الهوية:</strong> <input type="text" id="prevClientId" class="editable-field" value="1057713867" /></p>
-                        <p><strong>المشروع:</strong> <input type="text" id="prevProjectName" class="editable-field" value="عزل فوم لسطح الخاص بمول رويال سنتر" /></p>
-                        <p><strong>الموقع:</strong> <input type="text" id="prevLocation" class="editable-field" value="نجران" /></p>
-                        <p id="prevPlotContainer"><strong>رقم القطعة / المخطط:</strong> <input type="text" id="prevPlotNum" class="editable-field" value="قطعة: 1/21/766 - مخطط: 3020" /></p>
+                        <p><strong>مقدم إلى السيد:</strong> <span id="prevClient">محمد مخفور بشر اليامي</span> المحترم،,,</p>
+                        <p id="prevClientIdContainer" style="display:none;"><strong>رقم الهوية:</strong> <span id="prevClientId">---</span></p>
+                        <p><strong>المشروع:</strong> <span id="prevProjectName">---</span></p>
+                        <p><strong>الموقع:</strong> <span id="prevLocation">---</span></p>
+                        <!-- رقم القطعة والمخطط يظهر فقط عند كتابته وفي شهادة الضمان وإذا ترك فارغاً لا يظهر -->
+                        <p id="prevPlotContainer" style="display:none;"><strong>رقم القطعة / المخطط:</strong> <span id="prevPlotNum">---</span></p>
                     </div>
                     <div>
-                        <p><strong>التاريخ:</strong> <span id="prevDate">2026/02/17</span></p>
-                        <p><strong>مساحة المشروع:</strong> <span id="prevArea">14,000</span> م²</p>
-                        <p><strong>سعر المتر:</strong> <span id="prevMeterPrice">33.00</span> ر.س</p>
-                        <p id="prevExecContainer"><strong>مدة التنفيذ:</strong> <input type="text" id="prevExecDays" class="editable-field" value="25 يوم عمل" /></p>
+                        <p><strong>التاريخ:</strong> <span id="prevDate">---</span></p>
+                        <p><strong>مساحة المشروع:</strong> <span id="prevArea">0</span> م²</p>
+                        <p><strong>سعر المتر:</strong> <span id="prevMeterPrice">0.00</span> ر.س</p>
+                        <p id="prevExecContainer"><strong>مدة التنفيذ:</strong> <span id="prevExecDays">---</span></p>
                     </div>
                 </div>
 
-                <!-- نطاق العمل (قابل للتعديل المباشر) -->
+                <!-- نطاق العمل -->
                 <div class="section-title" id="scopeTitle">أولاً: نطاق وخطوات العمل والمواصفات الفنية</div>
-                <textarea id="prevTableDesc" class="editable-field" rows="5" style="font-size: 13px; margin-bottom: 12px; line-height: 1.6; border: 1px dashed #cbd5e1; padding: 6px; border-radius: 6px; width: 100%;">إزالة الأجزاء المتضررة من العزل القديم ومعالجة السطح.
-رش فوم في الأماكن المتضررة لرفع منسوب السمك وتسوية السطح.
-رش فوم بولي يوريثان بسمك (٤ سم) لكامل مساحة السطح.
-دهان طبقة حماية من مادة الإكريليك عالية الجودة.
-منح ضمان لمدة ١٥ عاماً موثق من الغرفة التجارية.</textarea>
+                <div style="font-size: 13px; margin-bottom: 12px; white-space: pre-line; line-height: 1.6;" id="prevTableDesc">
+لم يتم إدخال وصف العمل بعد...
+                </div>
 
                 <!-- الجدول المالي -->
                 <div class="section-title" id="financialTitle">ثانياً: التفاصيل المالية وجدول الأسعار</div>
@@ -606,11 +578,11 @@
                         <tbody>
                             <tr>
                                 <td>1</td>
-                                <td><input type="text" id="tableItemDesc" class="editable-field" value="تنفيذ أعمال عزل الفوم المائي والحراري مع طبقة الحماية" /></td>
+                                <td><span id="tableItemDesc">تنفيذ أعمال العزل</span></td>
                                 <td>م²</td>
-                                <td><span id="prevAreaTable">14,000</span></td>
-                                <td><span id="prevMeterTable">33</span> ر.س</td>
-                                <td><span id="subTotalText">462,000.00</span></td>
+                                <td><span id="prevAreaTable">0</span></td>
+                                <td><span id="prevMeterTable">0</span> ر.س</td>
+                                <td><span id="subTotalText">0.00</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -621,15 +593,15 @@
                     <div class="totals-box">
                         <div class="totals-row">
                             <span>المجموع الفرعي:</span>
-                            <span id="subTotal">462,000.00 ر.س</span>
+                            <span id="subTotal">0.00 ر.س</span>
                         </div>
                         <div class="totals-row" id="taxRow">
                             <span>ضريبة القيمة المضافة (15%):</span>
-                            <span id="taxTotal">69,300.00 ر.س</span>
+                            <span id="taxTotal">0.00 ر.س</span>
                         </div>
                         <div class="totals-row final">
                             <span>الإجمالي الشامل:</span>
-                            <span id="grandTotal">531,300.00 ر.س</span>
+                            <span id="grandTotal">0.00 ر.س</span>
                         </div>
                     </div>
                 </div>
@@ -645,7 +617,7 @@
                     </ul>
                 </div>
 
-                <!-- بنود وشروط إضافية (خاصة بشهادة الضمان أو العقد) -->
+                <!-- بنود وشروط إضافية (خاصة بشهادة الضمان) -->
                 <div id="warrantyTermsContainer" style="display:none;">
                     <div class="section-title">شروط وأحكام شهادة الضمان (10 سنوات):</div>
                     <ol class="terms-list">
@@ -672,7 +644,7 @@
                     </div>
                 </div>
 
-                <!-- حقوق التعديل والإنشاء المطلوبة (بدون روابط خارجية) -->
+                <!-- تم إزالة الـ URL الخاص بالموقع كما طلبت تماماً وتعديله لتظهر حقوق التطوير أدناه -->
                 <div class="creator-watermark">
                     <div>Created by Eng. Mohamed Abu El-Kheir</div>
                     <div>تم الإنشاء بواسطة المهندس / محمد أبو الخير</div>
@@ -721,6 +693,7 @@
         document.getElementById('quoteDate').valueAsDate = new Date();
         formatDateDisplay(document.getElementById('quoteDate').value);
         updateCalculations();
+        toggleDocumentFields();
         
         if(window.innerWidth < 768) {
             currentZoom = 0.55;
@@ -814,7 +787,10 @@
     }
 
     function formatDateDisplay(dateVal) {
-        if(!dateVal) return;
+        if(!dateVal) {
+            document.getElementById('prevDate').innerText = '---';
+            return;
+        }
         document.getElementById('prevDate').innerText = dateVal.replace(/-/g, '/');
     }
 
@@ -843,9 +819,18 @@
             dynamicExtraSection.style.display = 'none';
             taxGroupContainer.style.display = 'none';
             clientIdGroup.style.display = 'block';
-            plotNumGroup.style.display = 'block';
+            plotNumGroup.style.display = 'block'; // تظهر خانة الإدخال لشهادة الضمان
             prevClientIdContainer.style.display = 'block';
-            prevPlotContainer.style.display = 'block';
+            
+            // إدارة ظهور رقم القطعة والمخطط (تظهر فقط إذا كتب فيها ولم تترك فارغة)
+            const plotVal = document.getElementById('plotNum').value.trim();
+            if(plotVal !== '') {
+                prevPlotContainer.style.display = 'block';
+                document.getElementById('prevPlotNum').innerText = plotVal;
+            } else {
+                prevPlotContainer.style.display = 'none';
+            }
+
             prevExecContainer.style.display = 'none';
             execDaysGroup.style.display = 'none';
         } else if (docType === 'عقد اتفاق') {
@@ -856,9 +841,9 @@
             dynamicExtraSection.style.display = 'block';
             taxGroupContainer.style.display = 'flex';
             clientIdGroup.style.display = 'block';
-            plotNumGroup.style.display = 'block';
+            plotNumGroup.style.display = 'none'; // تختفي في العقد
             prevClientIdContainer.style.display = 'block';
-            prevPlotContainer.style.display = 'block';
+            prevPlotContainer.style.display = 'none'; // تختفي تماماً في العقد وعرض السعر
             prevExecContainer.style.display = 'block';
             execDaysGroup.style.display = 'block';
             
@@ -872,43 +857,63 @@
                 </ul>
             `;
         } else {
+            // عرض سعر
             warrantyContainer.style.display = 'none';
             financialTitle.style.display = 'block';
             tableResponsive.style.display = 'block';
             totalsSection.style.display = 'flex';
             dynamicExtraSection.style.display = 'block';
             taxGroupContainer.style.display = 'flex';
-            clientIdGroup.style.display = 'none';
-            plotNumGroup.style.display = 'none';
-            prevClientIdContainer.style.display = 'none';
-            prevPlotContainer.style.display = 'none';
+            clientIdGroup.style.display = 'block';
+            plotNumGroup.style.display = 'none'; // تختفي في عرض السعر
+            prevClientIdContainer.style.display = 'block';
+            prevPlotContainer.style.display = 'none'; // تختفي تماماً في عرض السعر
             prevExecContainer.style.display = 'block';
             execDaysGroup.style.display = 'block';
+
+            const execDaysVal = document.getElementById('execDays').value || '---';
 
             dynamicExtraSection.innerHTML = `
                 <div class="section-title">رابعاً: شروط الدفعات والمدة</div>
                 <ul class="terms-list">
                     <li><strong>50%</strong> دفعة مقدمة عند التعاقد. | <strong>25%</strong> عند 50% من الأعمال. | <strong>10%</strong> عند 75%. | <strong>15%</strong> عند التسليم النهائي.</li>
-                    <li><strong>مدة التنفيذ:</strong> <input type="text" class="editable-field" style="display:inline; width:100px;" value="${document.getElementById('execDays').value}" /> من تاريخ استلام الموقع ودفعة المقدمة.</li>
+                    <li><strong>مدة التنفيذ:</strong> ${execDaysVal} من تاريخ استلام الموقع ودفعة المقدمة.</li>
                 </ul>
             `;
         }
     }
 
-    // مزامنة حقول الإدخال العلوية مع المعاينة الحية
-    document.getElementById('clientName').addEventListener('input', (e) => { document.getElementById('prevClient').value = e.target.value || '---'; });
-    document.getElementById('clientIdNum').addEventListener('input', (e) => { document.getElementById('prevClientId').value = e.target.value || '---'; });
-    document.getElementById('projectName').addEventListener('input', (e) => { document.getElementById('prevProjectName').value = e.target.value || '---'; });
-    document.getElementById('projectLocation').addEventListener('input', (e) => { document.getElementById('prevLocation').value = e.target.value || '---'; });
-    document.getElementById('plotNum').addEventListener('input', (e) => { document.getElementById('prevPlotNum').value = e.target.value || '---'; });
-    document.getElementById('execDays').addEventListener('input', (e) => { document.getElementById('prevExecDays').value = e.target.value || '---'; });
+    // الربط والتحديث الحي المباشر لجميع الحقول والمدخلات
+    document.getElementById('clientName').addEventListener('input', (e) => { document.getElementById('prevClient').innerText = e.target.value || '---'; });
+    document.getElementById('clientIdNum').addEventListener('input', (e) => { document.getElementById('prevClientId').innerText = e.target.value || '---'; });
+    document.getElementById('projectName').addEventListener('input', (e) => { document.getElementById('prevProjectName').innerText = e.target.value || '---'; });
+    document.getElementById('projectLocation').addEventListener('input', (e) => { document.getElementById('prevLocation').innerText = e.target.value || '---'; });
+    
+    document.getElementById('plotNum').addEventListener('input', (e) => { 
+        const val = e.target.value.trim();
+        const prevPlotContainer = document.getElementById('prevPlotContainer');
+        if(val !== '' && document.getElementById('docType').value === 'شهادة ضمان') {
+            prevPlotContainer.style.display = 'block';
+            document.getElementById('prevPlotNum').innerText = val;
+        } else {
+            prevPlotContainer.style.display = 'none';
+        }
+    });
+
+    document.getElementById('execDays').addEventListener('input', (e) => { 
+        const val = e.target.value || '---';
+        document.getElementById('prevExecDays').innerText = val;
+        if(document.getElementById('docType').value === 'عرض سعر') {
+            toggleDocumentFields();
+        }
+    });
     
     document.getElementById('quoteDate').addEventListener('input', (e) => { formatDateDisplay(e.target.value); });
     
     document.getElementById('projectDesc').addEventListener('input', (e) => {
         const val = e.target.value || 'لم يتم إدخال وصف العمل بعد...';
-        document.getElementById('prevTableDesc').value = val;
-        document.getElementById('tableItemDesc').value = val.split('\n')[0] || 'تنفيذ أعمال عزل الفوم';
+        document.getElementById('prevTableDesc').innerText = val;
+        document.getElementById('tableItemDesc').innerText = val.split('\n')[0] || 'تنفيذ أعمال العزل';
     });
 
     function updateCalculations() {
@@ -954,15 +959,15 @@
             return;
         }
 
-        const smartText = `إزالة الأجزاء المتضررة من العزل القديم ومعالجة السطح للمشروع (${projectName}).
-رش فوم في الأماكن المتضررة لرفع منسوب السمك وتسوية السطح.
-رش فوم بولي يوريثان بسمك (٤ سم) لكامل مساحة السطح البالغة ${area} متر مربع.
-دهان طبقة حماية من مادة الإكريليك عالية الجودة ومقاومة للعوامل الجوية.
-منح ضمان معتمد لمدة ١٥ عاماً وفقاً لشروط ${docType}.`;
+        const smartText = `​1- تنظيف السطح: تنظيف كامل السطح من الأتربة والشوائب لضمان جودة الالتصاق.
+2- الطبقة الأولى: تنفيذ طبقة أولى من مادة عزل الفوم بولي يوريثان.
+3- الطبقة الثانية: تنفيذ طبقة ثانية من مادة عزل الفوم لضمان التغطية والسماكة المطلوبة.
+4- طبقة الحماية: تنفيذ طبقة نهائية من مادة الإكريليك لحماية العزل من العوامل الجوية.
+5- يتم تقديم ضمان 10 سنوات.${docType}.`;
 
         document.getElementById('projectDesc').value = smartText;
-        document.getElementById('prevTableDesc').value = smartText;
-        document.getElementById('tableItemDesc').value = `تنفيذ أعمال عزل الفوم المائي والحراري لمشروع ${projectName}`;
+        document.getElementById('prevTableDesc').innerText = smartText;
+        document.getElementById('tableItemDesc').innerText = `تنفيذ أعمال عزل الفوم المائي والحراري لمشروع ${projectName}`;
         
         alert('تمت صياغة تفاصيل وبنود العمل بدقة بناءً على نماذج المؤسسة بنجاح!');
     }
