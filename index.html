@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منصة عقود وتقارير المقاولات الذكية</title>
-    <!-- Tailwind CSS لتصميم أنيق -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- مكتبة توليد الـ PDF -->
+    <!-- مكتبة PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body class="bg-gray-100 font-sans p-4">
@@ -41,7 +41,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-600">اسم الفني أو المهندس المسؤول (اختياري)</label>
-                    <input type="text" id="technicianName" placeholder="مثال: المهندس محمد ابو الخير" class="mt-1 w-full p-2 border rounded-md">
+                    <input type="text" id="technicianName" placeholder="مثال: الباشمهندس محمد ابو الخير" class="mt-1 w-full p-2 border rounded-md">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-600">السعر الأساسي (ريال)</label>
@@ -70,7 +70,7 @@
                     <label class="block text-sm font-medium text-gray-600">تفاصيل الخدمة أو البنود الفنية (اختياري)</label>
                     <button onclick="generateWithAI()" type="button" class="text-xs bg-purple-600 text-white px-3 py-1 rounded hover:bg-purple-700 transition">✨ صياغة تلقائية بالذكاء الاصطناعي</button>
                 </div>
-                <textarea id="serviceDetails" rows="3" placeholder="اكتب تفاصيل العمل أو اضغط على الزر أعلاه..." class="w-full p-2 border rounded-md"></textarea>
+                <textarea id="serviceDetails" rows="4" placeholder="اكتب تفاصيل العمل أو اضغط على الزر أعلاه..." class="w-full p-2 border rounded-md"></textarea>
             </div>
 
             <button onclick="saveAndGeneratePDF()" class="mt-6 w-full bg-green-600 text-white p-3 rounded-md font-bold hover:bg-green-700 transition">
@@ -79,7 +79,7 @@
         </div>
     </div>
 
-    <!-- قالب المعاينة المخفي لتوليد الـ PDF (يخفي أي حقل فارغ تلقائياً) -->
+    <!-- قالب المعاينة المخفي لتوليد الـ PDF -->
     <div id="pdfContent" class="bg-white p-8 rounded-lg shadow-md border hidden max-w-2xl mx-auto">
         <div class="flex justify-between items-center border-b pb-4 mb-4">
             <div>
@@ -144,44 +144,48 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // مفتاح جيميناي الخاص بك كاملاً وآمناً
-        const GEMINI_API_KEY = "AQ.Ab8RN6LwKMBGCqeOtSqHZZzhaVwwy9lGeEXXefwL2sSKPyleDA";
+        // تم ضبط المفتاح الخاص بك الذي يبدأ بـ AQ هنا مباشرة
+        const GEMINI_API_KEY = "AQ.Ab8RN6LwKMBGCqeOtSqHZZzhaVwwy9lGeEXXefwL2sSKPyleDA"; // ضع باقي حروف مفتاحك كاملاً هنا
 
         window.toggleTaxInput = function() {
             const hasTax = document.getElementById('hasTax').checked;
-            const taxContainer = document.getElementById('taxContainer');
-            if(hasTax) {
-                taxContainer.classList.remove('hidden');
-            } else {
-                taxContainer.classList.add('hidden');
-            }
+            document.getElementById('taxContainer').classList.toggle('hidden', !hasTax);
         };
 
         window.generateWithAI = async function() {
             const docType = document.getElementById('docType').value;
             const clientName = document.getElementById('clientName').value || 'عميل';
-            
-            alert("جاري التوليد بواسطة الذكاء الاصطناعي...");
-            
-            try {
-                const response = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
-                const prompt = `اكتب بنود تفصيلية احترافية لـ ${docType} موجهة للعميل ${clientName}، اجعل النص منسقاً وجاهزاً لعقد مقاولات أو تقرير فني باللغة العربية.`;
+            const serviceDetails = document.getElementById('serviceDetails');
 
-                const res = await fetch(response, {
+            serviceDetails.value = "جارٍ التوليد بواسطة الذكاء الاصطناعي... برجاء الانتظار...";
+
+            try {
+                // استخدام طريقة المصادقة المناسبة لمفتاح المشروع
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`;
+                const promptText = `اكتب بنوداً تفصيلية واحترافية لـ ${docType} موجهة للعميل ${clientName}، اجعل النص منسقاً وبنقاط واضحة ومناسباً لعقد أو تقرير مقاولات باللغة العربية.`;
+
+                const res = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: promptText }] }]
+                    })
                 });
 
                 const data = await res.json();
-                if(data.candidates && data.candidates[0].content) {
-                    const text = data.candidates[0].content.parts[0].text;
-                    document.getElementById('serviceDetails').value = text;
+
+                if (data.candidates && data.candidates[0]?.content?.parts[0]?.text) {
+                    serviceDetails.value = data.candidates[0].content.parts[0].text;
+                } else if (data.error) {
+                    alert("خطأ من خوادم جوجل: " + data.error.message);
+                    serviceDetails.value = "";
                 } else {
-                    alert("تعذر جلب الرد من الذكاء الاصطناعي، تأكد من صحة المفتاح.");
+                    alert("تعذر جلب البيانات، تأكد من صحة المفتاح.");
+                    serviceDetails.value = "";
                 }
             } catch (error) {
-                alert("حدث خطأ أثناء الاتصال بالذكاء الاصطناعي.");
+                alert("حدث خطأ في الاتصال بالشبكة.");
+                serviceDetails.value = "";
             }
         };
 
@@ -209,7 +213,7 @@
                 totalPrice = rawPrice + taxAmount;
             }
 
-            // 1. حفظ المستند في فايربيز (Firestore)
+            // 1. الحفظ في Firebase
             try {
                 await addDoc(collection(db, "documents"), {
                     docType, clientName, clientAddress, technicianName, 
@@ -220,61 +224,36 @@
                 console.error("خطأ في الحفظ بقاعدة البيانات: ", e);
             }
 
-            // 2. تعبئة بيانات المعاينة للـ PDF وإخفاء الحقول الفارغة تماماً
+            // 2. إعداد معاينة الـ PDF وإخفاء الفارغ
             document.getElementById('previewDocTitle').innerText = docType;
 
-            // العميل
-            if(clientName) {
-                document.getElementById('pClient').innerText = clientName;
-                document.getElementById('rowClient').classList.remove('hidden');
-            } else {
-                document.getElementById('rowClient').classList.add('hidden');
-            }
+            const toggleRow = (rowId, value, targetId) => {
+                const row = document.getElementById(rowId);
+                if (value) {
+                    document.getElementById(targetId).innerText = value;
+                    row.classList.remove('hidden');
+                } else {
+                    row.classList.add('hidden');
+                }
+            };
 
-            // العنوان
-            if(clientAddress) {
-                document.getElementById('pAddress').innerText = clientAddress;
-                document.getElementById('rowAddress').classList.remove('hidden');
-            } else {
-                document.getElementById('rowAddress').classList.add('hidden');
-            }
+            toggleRow('rowClient', clientName, 'pClient');
+            toggleRow('rowAddress', clientAddress, 'pAddress');
+            toggleRow('rowTech', technicianName, 'pTech');
+            toggleRow('rowWarranty', warrantyPeriod, 'pWarranty');
+            toggleRow('rowDetails', serviceDetails, 'pDetails');
 
-            // الفني
-            if(technicianName) {
-                document.getElementById('pTech').innerText = technicianName;
-                document.getElementById('rowTech').classList.remove('hidden');
-            } else {
-                document.getElementById('rowTech').classList.add('hidden');
-            }
-
-            // الضمان
-            if(warrantyPeriod) {
-                document.getElementById('pWarranty').innerText = warrantyPeriod;
-                document.getElementById('rowWarranty').classList.remove('hidden');
-            } else {
-                document.getElementById('rowWarranty').classList.add('hidden');
-            }
-
-            // التفاصيل
-            if(serviceDetails) {
-                document.getElementById('pDetails').innerText = serviceDetails;
-                document.getElementById('rowDetails').classList.remove('hidden');
-            } else {
-                document.getElementById('rowDetails').classList.add('hidden');
-            }
-
-            // الأسعار بالريال
-            document.getElementById('pSubTotal').innerText = rawPrice.toFixed(2) + " ريال";
+            document.getElementById('pSubTotal').innerText = rawPrice.toFixed(2) + " ريال سعودي";
             
             if(hasTax && taxRate > 0) {
                 document.getElementById('pTaxLabel').innerText = `قيمة الضريبة (${taxRate}%):`;
-                document.getElementById('pTaxAmount').innerText = taxAmount.toFixed(2) + " ريال";
+                document.getElementById('pTaxAmount').innerText = taxAmount.toFixed(2) + " ريال سعودي";
                 document.getElementById('rowTax').classList.remove('hidden');
             } else {
                 document.getElementById('rowTax').classList.add('hidden');
             }
 
-            document.getElementById('pPrice').innerText = totalPrice.toFixed(2) + " ريال";
+            document.getElementById('pPrice').innerText = totalPrice.toFixed(2) + " ريال سعودي";
 
             const element = document.getElementById('pdfContent');
             element.classList.remove('hidden');
