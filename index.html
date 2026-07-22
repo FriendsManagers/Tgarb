@@ -26,7 +26,7 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             line-height: 1.6;
-            padding: 20px;
+            padding: 10px;
         }
 
         .container {
@@ -37,55 +37,65 @@
         header {
             background: linear-gradient(135deg, var(--primary), #1e293b);
             color: white;
-            padding: 20px;
+            padding: 15px;
             border-radius: 12px;
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
         header h1 {
-            font-size: 24px;
+            font-size: 18px;
             margin-bottom: 5px;
         }
 
         header p {
-            font-size: 14px;
+            font-size: 12px;
             color: #94a3b8;
         }
 
         .card {
             background: var(--card-bg);
             border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 25px;
+            padding: 15px;
+            margin-bottom: 15px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             border: 1px solid var(--border-color);
         }
 
         .card h2 {
-            font-size: 18px;
+            font-size: 16px;
             color: var(--primary);
-            margin-bottom: 15px;
-            padding-bottom: 8px;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
             border-bottom: 2px solid #f1f5f9;
         }
 
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 15px;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        @media(min-width: 768px) {
+            body { padding: 20px; }
+            header { padding: 20px; }
+            header h1 { font-size: 24px; }
+            header p { font-size: 14px; }
+            .card { padding: 25px; margin-bottom: 25px; }
+            .card h2 { font-size: 18px; }
+            .form-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         label {
             display: block;
             font-weight: 600;
             margin-bottom: 5px;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         input, select, textarea {
@@ -96,6 +106,7 @@
             font-size: 14px;
             outline: none;
             transition: border-color 0.2s;
+            background-color: #fff;
         }
 
         input:focus, select:focus, textarea:focus {
@@ -161,59 +172,101 @@
         .preview-box {
             background: white;
             border: 1px solid var(--border-color);
-            padding: 35px;
+            padding: 15px;
             border-radius: 12px;
-            margin-top: 20px;
+            margin-top: 15px;
             position: relative;
+            overflow-x: auto;
+        }
+
+        @media(min-width: 768px) {
+            .preview-box { padding: 35px; }
         }
 
         .invoice-header {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
+            flex-direction: column;
+            gap: 15px;
             border-bottom: 2px solid var(--primary);
-            padding-bottom: 20px;
-            margin-bottom: 20px;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        @media(min-width: 768px) {
+            .invoice-header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: flex-start;
+            }
         }
 
         .company-info h3 {
             color: var(--primary);
-            font-size: 22px;
+            font-size: 18px;
             margin-bottom: 5px;
         }
 
+        @media(min-width: 768px) {
+            .company-info h3 { font-size: 22px; }
+        }
+
         .company-info p {
-            font-size: 13px;
+            font-size: 12px;
             color: #64748b;
         }
 
         .company-logo-preview {
-            max-width: 90px;
-            max-height: 90px;
+            max-width: 70px;
+            max-height: 70px;
             object-fit: contain;
+        }
+
+        @media(min-width: 768px) {
+            .company-logo-preview { max-width: 90px; max-height: 90px; }
         }
 
         .invoice-meta {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+            gap: 10px;
             background: #f8fafc;
-            padding: 15px;
+            padding: 12px;
             border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 14px;
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+
+        @media(min-width: 768px) {
+            .invoice-meta {
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 15px;
+                font-size: 14px;
+            }
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 15px;
         }
 
         .items-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            min-width: 500px;
         }
 
         .items-table th, .items-table td {
             border: 1px solid #e2e8f0;
-            padding: 10px 12px;
+            padding: 8px 10px;
             text-align: right;
-            font-size: 14px;
+            font-size: 13px;
+        }
+
+        @media(min-width: 768px) {
+            .items-table th, .items-table td { padding: 10px 12px; font-size: 14px; }
         }
 
         .items-table th {
@@ -224,45 +277,73 @@
         .totals-section {
             display: flex;
             justify-content: flex-end;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .totals-box {
-            width: 320px;
+            width: 100%;
+            max-width: 320px;
             background: #f8fafc;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
-            padding: 15px;
+            padding: 12px;
+        }
+
+        @media(min-width: 768px) {
+            .totals-box { padding: 15px; }
         }
 
         .totals-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 14px;
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+
+        @media(min-width: 768px) {
+            .totals-row { font-size: 14px; margin-bottom: 8px; }
         }
 
         .totals-row.final {
             border-top: 2px solid var(--primary);
-            padding-top: 8px;
+            padding-top: 6px;
             font-weight: bold;
             color: var(--primary);
-            font-size: 16px;
+            font-size: 15px;
+        }
+
+        @media(min-width: 768px) {
+            .totals-row.final { font-size: 16px; padding-top: 8px; }
         }
 
         .invoice-footer {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-top: 40px;
+            flex-direction: column;
+            gap: 15px;
+            align-items: flex-start;
+            margin-top: 25px;
             border-top: 1px solid #e2e8f0;
-            padding-top: 20px;
+            padding-top: 15px;
+        }
+
+        @media(min-width: 768px) {
+            .invoice-footer {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: flex-end;
+                margin-top: 40px;
+                padding-top: 20px;
+            }
         }
 
         .stamp-preview {
-            max-width: 110px;
-            max-height: 110px;
+            max-width: 90px;
+            max-height: 90px;
             object-fit: contain;
+        }
+
+        @media(min-width: 768px) {
+            .stamp-preview { max-width: 110px; max-height: 110px; }
         }
 
         .alert {
@@ -271,7 +352,7 @@
             color: #065f46;
             border-radius: 8px;
             margin-bottom: 15px;
-            font-size: 14px;
+            font-size: 13px;
             display: none;
         }
 
@@ -324,7 +405,7 @@
                     <input type="file" id="compStamp" accept="image/*">
                 </div>
             </div>
-            <button type="submit" class="btn">حفظ بيانات الشركة العامة</button>
+            <button type="submit" class="btn" style="margin-top: 10px;">حفظ بيانات الشركة العامة</button>
         </form>
     </div>
 
@@ -368,7 +449,7 @@
             <label for="taxCheckbox">إضافة ضريبة القيمة المضافة (15%)</label>
         </div>
 
-        <button type="button" class="btn btn-ai" onclick="generateAIProposal()" style="margin-top: 15px;">توليد وصياغة وصف العمل بالذكاء الاصطناعي</button>
+        <button type="button" class="btn btn-ai" onclick="generateAIProposal()">توليد وصياغة وصف العمل بالذكاء الاصطناعي</button>
     </div>
 
     <!-- المعاينة الاحترافية -->
@@ -397,26 +478,28 @@
                 </div>
             </div>
 
-            <table class="items-table">
-                <thead>
-                    <tr>
-                        <th>م</th>
-                        <th>وصف العمل البنود والأعمال</th>
-                        <th>الوحدة</th>
-                        <th>الكمية / المساحة</th>
-                        <th>الإجمالي (ر.س)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td><span id="prevTableDesc">لم يتم إدخال وصف العمل بعد...</span></td>
-                        <td>م²</td>
-                        <td><span id="prevAreaTable">0</span></td>
-                        <td><span id="subTotalText">0.00</span></td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="items-table">
+                    <thead>
+                        <tr>
+                            <th>م</th>
+                            <th>وصف العمل البنود والأعمال</th>
+                            <th>الوحدة</th>
+                            <th>الكمية / المساحة</th>
+                            <th>الإجمالي (ر.س)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td><span id="prevTableDesc">لم يتم إدخال وصف العمل بعد...</span></td>
+                            <td>م²</td>
+                            <td><span id="prevAreaTable">0</span></td>
+                            <td><span id="subTotalText">0.00</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
             <!-- خانة الإجماليات -->
             <div class="totals-section">
@@ -438,7 +521,7 @@
 
             <div class="invoice-footer">
                 <div>
-                    <p style="font-size: 13px; color: #64748b;">معتمد من الإدارة والمشرف العام</p>
+                    <p style="font-size: 12px; color: #64748b;">معتمد من الإدارة والمشرف العام</p>
                 </div>
                 <div>
                     <img id="prevStamp" class="stamp-preview" src="" alt="" style="display:none;">
