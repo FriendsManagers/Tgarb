@@ -23,7 +23,7 @@
         }
 
         body {
-            background-color: var--bg-color);
+            background-color: var(--bg-color);
             color: var(--text-color);
             line-height: 1.6;
             padding: 20px;
@@ -148,6 +148,15 @@
             background: linear-gradient(135deg, #7c3aed, #4f46e5);
         }
 
+        .btn-print {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            margin-top: 15px;
+        }
+
+        .btn-print:hover {
+            background: linear-gradient(135deg, #d97706, #b45309);
+        }
+
         /* معاينة المستند */
         .preview-box {
             background: white;
@@ -265,6 +274,12 @@
             font-size: 14px;
             display: none;
         }
+
+        @media print {
+            body { background-color: white; padding: 0; }
+            .card:not(:last-child), header, .btn, .alert { display: none; }
+            .preview-box { border: none; padding: 0; margin: 0; }
+        }
     </style>
 </head>
 <body>
@@ -320,8 +335,9 @@
             <div class="form-group">
                 <label>نوع المستند</label>
                 <select id="docType">
-                    <option value="عروض أسعار">عرض سعر</option>
+                    <option value="عرض سعر">عرض سعر</option>
                     <option value="عقد اتفاق">عقد اتفاق</option>
+                    <option value="شهادة ضمان">شهادة ضمان</option>
                     <option value="فاتورة">فاتورة</option>
                 </select>
             </div>
@@ -359,7 +375,7 @@
     <!-- المعاينة الاحترافية -->
     <div class="card">
         <h2>معاينة المستند النهائي</h2>
-        <div class="preview-box">
+        <div class="preview-box" id="printableArea">
             <div class="invoice-header">
                 <div class="company-info">
                     <h3 id="prevCompName">اسم الشركة غير مسجل</h3>
@@ -430,6 +446,9 @@
                 </div>
             </div>
         </div>
+
+        <!-- زر التحميل / الطباعة -->
+        <button type="button" class="btn btn-print" onclick="window.print()">حفظ المستند / طباعة PDF</button>
     </div>
 </div>
 
