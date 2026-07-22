@@ -168,7 +168,6 @@
             background: linear-gradient(135deg, #d97706, #b45309);
         }
 
-        /* حاوية المعاينة مع دعم الزوم والتصغير العام للجوال */
         .preview-container-wrapper {
             width: 100%;
             overflow-x: auto;
@@ -201,7 +200,6 @@
             background: #1e293b;
         }
 
-        /* معاينة المستند (مصغرة افتراضياً لتناسب الشاشة بالكامل) */
         .preview-box {
             background: white;
             border: 1px solid var(--border-color);
@@ -390,7 +388,6 @@
 <body>
 
 <div class="container">
-    <!-- توقيع المطور في أول الموقع -->
     <div style="text-align: center; padding: 8px; font-size: 12px; font-weight: bold; color: var(--primary); background: #e0f2fe; border-radius: 8px; margin-bottom: 10px;">
         <div>Created by Eng. Mohamed Abu El-Kheir</div>
         <div>تم الإنشاء بواسطة المهندس / محمد أبو الخير</div>
@@ -403,7 +400,6 @@
 
     <div id="alertBox" class="alert">تم حفظ الإعدادات بنجاح!</div>
 
-    <!-- إعدادات مفتاح الذكاء الاصطناعي -->
     <div class="card">
         <h2>إعدادات الذكاء الاصطناعي (ChatGPT / API Key)</h2>
         <div class="form-group">
@@ -413,18 +409,17 @@
         <button type="button" class="btn" onclick="saveApiKey()">حفظ مفتاح التشغيل</button>
     </div>
 
-    <!-- بيانات الشركة -->
     <div class="card">
         <h2>إعدادات بيانات الشركة والمؤسسة</h2>
         <form id="companyForm">
             <div class="form-grid">
                 <div class="form-group">
                     <label>اسم الشركة أو المؤسسة</label>
-                    <input type="text" id="compName" placeholder="مثال: مؤسسة أقاليم المناهل للمقاولات" required>
+                    <input type="text" id="compName" placeholder="مثال: مؤسسة أقاليم المناهل للمقاولات">
                 </div>
                 <div class="form-group">
                     <label>رقم السجل التجاري</label>
-                    <input type="text" id="compReg" placeholder="مثال: 153444373" required>
+                    <input type="text" id="compReg" placeholder="مثال: 1011124700">
                 </div>
                 <div class="form-group">
                     <label>نشاط الشركة / التخصصات الفرعية</label>
@@ -447,7 +442,7 @@
         </form>
     </div>
 
-    <!-- إدخال تفاصيل المشروع والمستند (القيم الافتراضية المطلوبة، خالية مادة الاسم) -->
+    <!-- إدخال تفاصيل المشروع والمستند (خانات خالية تماماً ومزودة بـ Placeholder فقط كما طلبت) -->
     <div class="card">
         <h2>إنشاء وتخصيص المستند الجديد</h2>
         <div class="form-grid">
@@ -461,8 +456,7 @@
             </div>
             <div class="form-group">
                 <label>اسم العميل (المستفيد)</label>
-                <!-- الاسم الوحيد الثابت كما طلبْت -->
-                <input type="text" id="clientName"  placeholder="محمد أحمد">
+                <input type="text" id="clientName" placeholder="مثال: Mohamed Red">
             </div>
             <div class="form-group" id="clientIdGroup">
                 <label>رقم الهوية / السجل للعميل</label>
@@ -470,27 +464,31 @@
             </div>
             <div class="form-group">
                 <label>اسم المشروع / وصف عام</label>
-                <input type="text" id="projectName"  placeholder="عزل أسطح">
+                <input type="text" id="projectName" placeholder="مثال: عزل أسطح">
             </div>
             <div class="form-group">
                 <label>موقع المشروع / المدينة</label>
-                <input type="text" id="projectLocation" value="الرياض" placeholder="الرياض">
+                <input type="text" id="projectLocation" placeholder="Riyadh / الرياض">
             </div>
             <div class="form-group" id="plotNumGroup" style="display:none;">
                 <label>رقم قطعة الأرض / المخطط (لشهادة الضمان فقط)</label>
-                <input type="text" id="plotNum" value="" placeholder="قطعة: 1/21/766">
+                <input type="text" id="plotNum" placeholder="مثال: 766">
             </div>
             <div class="form-group">
                 <label>المساحة الإجمالية (بالمتر المربع)</label>
-                <input type="number" id="projectArea"  placeholder="250">
+                <input type="number" id="projectArea" placeholder="250">
             </div>
             <div class="form-group">
                 <label>سعر المتر (ر.س)</label>
-                <input type="number" id="meterPrice"  placeholder="20">
+                <input type="number" id="meterPrice" placeholder="20">
             </div>
             <div class="form-group">
                 <label>تاريخ المستند</label>
                 <input type="date" id="quoteDate">
+            </div>
+            <div class="form-group" id="execDaysGroup">
+                <label>مدة التنفيذ (أيام عمل)</label>
+                <input type="text" id="execDays" placeholder="مثال: 5 أيام عمل">
             </div>
             <div class="form-group" style="grid-column: 1 / -1;">
                 <label>نطاق وخطوات العمل (البند / التفاصيل الفنية)</label>
@@ -500,14 +498,12 @@
 4- طبقة الحماية: تنفيذ طبقة نهائية من مادة الإكريليك لحماية العزل من العوامل الجوية.
 5- يتم تقديم ضمان 10 سنوات.</textarea>
             </div>
-            <!-- خانة الملاحظات الإضافية كما طلبت -->
             <div class="form-group" style="grid-column: 1 / -1;">
                 <label>ملاحظات إضافية (اختياري)</label>
                 <textarea id="projectNotes" rows="2" placeholder="أضف أي ملاحظات إضافية هنا لتظهر في المستند..."></textarea>
             </div>
         </div>
         
-        <!-- خيار الضريبة -->
         <div class="checkbox-group" id="taxGroupContainer">
             <input type="checkbox" id="taxCheckbox" checked>
             <label for="taxCheckbox">إضافة ضريبة القيمة المضافة (15% - شامل السعر أو مضاف)</label>
@@ -516,11 +512,10 @@
         <button type="button" class="btn btn-ai" onclick="generateAIProposal()">توليد وتحديث تفاصيل العمل بالذكاء الاصطناعي</button>
     </div>
 
-    <!-- المعاينة الاحترافية مع زوم وتصغير ملائم للجوال -->
+    <!-- المعاينة الاحترافية مع ميزة إخفاء الحانات الفارغة تماماً وترتيب الـ Grid تلقائياً -->
     <div class="card">
         <h2>معاينة المستند النهائي (قابلة للتحكم والزوم)</h2>
         
-        <!-- أزرار التحكم في الزوم للجوال -->
         <div class="zoom-controls">
             <button type="button" class="zoom-btn" onclick="zoomIn()">➕ تكبير (Zoom In)</button>
             <button type="button" class="zoom-btn" onclick="resetZoom()">🔄 الحجم الافتراضي</button>
@@ -532,7 +527,7 @@
                 <div class="invoice-header">
                     <div class="company-info">
                         <h3 id="prevCompName">مؤسسة أقاليم المناهل للمقاولات</h3>
-                        <p>سجل تجاري رقم: <span id="prevCompReg">1011124700</span></p>
+                        <p id="prevCompRegWrap">سجل تجاري رقم: <span id="prevCompReg">1011124700</span></p>
                         <p id="prevCompActivity">عزل فوم - عزل أسطح - عزل شينكو - عزل خزانات</p>
                         <p id="prevCompCity">الرياض - المملكة العربية السعودية</p>
                     </div>
@@ -543,24 +538,23 @@
 
                 <div class="doc-title-banner" id="prevDocTitleBanner">عرض سعر</div>
 
+                <!-- شبكة بيانات المستند تتكيف وتخفي أي سطر فارغ تماماً -->
                 <div class="invoice-meta" id="invoiceMetaBox">
-                    <div>
-                        <p><strong>مقدم إلى السيد:</strong> <span id="prevClient">محمد أحمر</span> المحترم،,,</p>
-                        <p id="prevClientIdContainer"><strong>رقم الهوية:</strong> <span id="prevClientId">123456789</span></p>
-                        <p><strong>المشروع:</strong> <span id="prevProjectName">عزل أسطح</span></p>
-                        <p><strong>الموقع:</strong> <span id="prevLocation">الرياض</span></p>
-                        <!-- رقم القطعة والمخطط يظهر فقط إذا كتب فيها ولم تترك فارغة وفي شهادة الضمان -->
-                        <p id="prevPlotContainer" style="display:none;"><strong>رقم القطعة / المخطط:</strong> <span id="prevPlotNum">---</span></p>
+                    <div id="metaCol1" style="display: flex; flexDirection: column; gap: 4px;">
+                        <p id="lineClient" style="display:none;"><strong>مقدم إلى السيد:</strong> <span id="prevClient"></span> المحترم،,,</p>
+                        <p id="lineClientId" style="display:none;"><strong>رقم الهوية:</strong> <span id="prevClientId"></span></p>
+                        <p id="lineProjectName" style="display:none;"><strong>المشروع:</strong> <span id="prevProjectName"></span></p>
+                        <p id="lineLocation" style="display:none;"><strong>الموقع:</strong> <span id="prevLocation"></span></p>
+                        <p id="linePlot" style="display:none;"><strong>رقم القطعة / المخطط:</strong> <span id="prevPlotNum"></span></p>
                     </div>
-                    <div>
-                        <p><strong>التاريخ:</strong> <span id="prevDate">---</span></p>
-                        <p><strong>مساحة المشروع:</strong> <span id="prevArea">250</span> م²</p>
-                        <p><strong>سعر المتر:</strong> <span id="prevMeterPrice">20.00</span> ر.س</p>
-                        <p id="prevExecContainer"><strong>مدة التنفيذ:</strong> <span id="prevExecDays">5 أيام عمل</span></p>
+                    <div id="metaCol2" style="display: flex; flexDirection: column; gap: 4px;">
+                        <p id="lineDate" style="display:none;"><strong>التاريخ:</strong> <span id="prevDate"></span></p>
+                        <p id="lineArea" style="display:none;"><strong>مساحة المشروع:</strong> <span id="prevArea"></span> م²</p>
+                        <p id="lineMeterPrice" style="display:none;"><strong>سعر المتر:</strong> <span id="prevMeterPrice"></span> ر.س</p>
+                        <p id="lineExecDays" style="display:none;"><strong>مدة التنفيذ:</strong> <span id="prevExecDays"></span></p>
                     </div>
                 </div>
 
-                <!-- نطاق العمل -->
                 <div class="section-title" id="scopeTitle">أولاً: نطاق وخطوات العمل والمواصفات الفنية</div>
                 <div style="font-size: 13px; margin-bottom: 12px; white-space: pre-line; line-height: 1.6;" id="prevTableDesc">
 1- تنظيف السطح: تنظيف كامل السطح من الأتربة والشوائب لضمان جودة الالتصاق.
@@ -570,15 +564,13 @@
 5- يتم تقديم ضمان 10 سنوات.
                 </div>
 
-                <!-- قسم الملاحظات الإضافية يظهر هنا عند كتابتها -->
                 <div id="notesContainer" style="display:none; margin-bottom: 12px;">
                     <div style="font-size: 13px; font-weight: bold; color: var(--primary); margin-bottom: 3px;">ملاحظات هامة:</div>
                     <div style="font-size: 13px; white-space: pre-line; background: #f8fafc; padding: 8px; border-radius: 6px; border: 1px dashed var(--border-color);" id="prevNotesText"></div>
                 </div>
 
-                <!-- الجدول المالي -->
                 <div class="section-title" id="financialTitle">ثانياً: التفاصيل المالية وجدول الأسعار</div>
-                <div style="width: 100%; overflow-x: auto; margin-bottom: 15px;">
+                <div style="width: 100%; overflow-x: auto; margin-bottom: 15px;" id="financialTableWrapper">
                     <table class="items-table">
                         <thead>
                             <tr>
@@ -597,31 +589,29 @@
                                 <td>م²</td>
                                 <td><span id="prevAreaTable">250</span></td>
                                 <td><span id="prevMeterTable">20</span> ر.س</td>
-                                <td><span id="subTotalText">5,000.00</span></td>
+                                <td><span id="subTotalText">0.00</span></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <!-- خانة الإجماليات -->
-                <div class="totals-section">
+                <div class="totals-section" id="totalsSectionBox">
                     <div class="totals-box">
                         <div class="totals-row">
                             <span>المجموع الفرعي:</span>
-                            <span id="subTotal">5,000.00 ر.س</span>
+                            <span id="subTotal">0.00 ر.س</span>
                         </div>
                         <div class="totals-row" id="taxRow">
                             <span>ضريبة القيمة المضافة (15%):</span>
-                            <span id="taxTotal">750.00 ر.س</span>
+                            <span id="taxTotal">0.00 ر.س</span>
                         </div>
                         <div class="totals-row final">
                             <span>الإجمالي الشامل:</span>
-                            <span id="grandTotal">5,750.00 ر.س</span>
+                            <span id="grandTotal">0.00 ر.س</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- الدفعات أو شروط الضمان -->
                 <div id="dynamicExtraSection">
                     <div class="section-title">ثالثاً: الدفعات وطريقة السداد</div>
                     <ul class="terms-list" id="paymentMilestonesList">
@@ -632,7 +622,6 @@
                     </ul>
                 </div>
 
-                <!-- بنود وشروط إضافية (خاصة بشهادة الضمان) -->
                 <div id="warrantyTermsContainer" style="display:none;">
                     <div class="section-title">شروط وأحكام شهادة الضمان (10 سنوات):</div>
                     <ol class="terms-list">
@@ -659,7 +648,6 @@
                     </div>
                 </div>
 
-                <!-- حقوق التطوير وخلو الـ URL كما طلبت -->
                 <div class="creator-watermark">
                     <div>Created by Eng. Mohamed Abu El-Kheir</div>
                     <div>تم الإنشاء بواسطة المهندس / محمد أبو الخير</div>
@@ -667,7 +655,6 @@
             </div>
         </div>
 
-        <!-- زر التحميل / الطباعة -->
         <button type="button" class="btn btn-print" onclick="window.print()">حفظ المستند / طباعة PDF احترافي</button>
     </div>
 </div>
@@ -705,8 +692,7 @@
         if(savedKey) {
             document.getElementById('apiKeyInput').value = savedKey;
         }
-        document.getElementById('quoteDate').valueAsDate = new Date();
-        formatDateDisplay(document.getElementById('quoteDate').value);
+        
         updateCalculations();
         toggleDocumentFields();
         
@@ -772,15 +758,16 @@
         const saved = localStorage.getItem('company_data');
         if (saved) {
             const data = JSON.parse(saved);
-            document.getElementById('compName').value = data.name || '';
-            document.getElementById('compReg').value = data.reg || '';
-            document.getElementById('compActivity').value = data.activity || '';
-            document.getElementById('compCity').value = data.city || '';
-
-            document.getElementById('prevCompName').innerText = data.name || 'اسم الشركة غير مسجل';
-            document.getElementById('prevCompReg').innerText = data.reg || '-------';
-            document.getElementById('prevCompActivity').innerText = data.activity || '';
-            document.getElementById('prevCompCity').innerText = data.city || '';
+            if(data.name) { document.getElementById('compName').value = data.name; document.getElementById('prevCompName').innerText = data.name; }
+            if(data.reg) { 
+                document.getElementById('compReg').value = data.reg; 
+                document.getElementById('prevCompReg').innerText = data.reg;
+                document.getElementById('prevCompRegWrap').style.display = 'block';
+            } else {
+                document.getElementById('prevCompRegWrap').style.display = 'none';
+            }
+            if(data.activity) { document.getElementById('compActivity').value = data.activity; document.getElementById('prevCompActivity').innerText = data.activity; document.getElementById('prevCompActivity').style.display = 'block'; } else { document.getElementById('prevCompActivity').style.display = 'none'; }
+            if(data.city) { document.getElementById('compCity').value = data.city; document.getElementById('prevCompCity').innerText = data.city; document.getElementById('prevCompCity').style.display = 'block'; } else { document.getElementById('prevCompCity').style.display = 'none'; }
 
             if (data.logo) {
                 const logoImg = document.getElementById('prevLogo');
@@ -801,12 +788,115 @@
         setTimeout(() => { alertBox.style.display = 'none'; }, 3000);
     }
 
-    function formatDateDisplay(dateVal) {
-        if(!dateVal) {
-            document.getElementById('prevDate').innerText = '---';
-            return;
+    // دالة فحص وتحديث ظهور الحقول الفارغة في معاينة المستند لتختفي تماماً وتتكدس مكأنها
+    function updateMetaVisibility() {
+        const clientVal = document.getElementById('clientName').value.trim();
+        const clientIdVal = document.getElementById('clientIdNum').value.trim();
+        const projectVal = document.getElementById('projectName').value.trim();
+        const locationVal = document.getElementById('projectLocation').value.trim();
+        const plotVal = document.getElementById('plotNum').value.trim();
+        
+        const dateVal = document.getElementById('quoteDate').value;
+        const areaVal = document.getElementById('projectArea').value.trim();
+        const meterPriceVal = document.getElementById('meterPrice').value.trim();
+        const execDaysVal = document.getElementById('execDays').value.trim();
+        const docType = document.getElementById('docType').value;
+
+        // سطر العميل
+        const lineClient = document.getElementById('lineClient');
+        if(clientVal !== '') {
+            lineClient.style.display = 'block';
+            document.getElementById('prevClient').innerText = clientVal;
+        } else {
+            lineClient.style.display = 'none';
         }
-        document.getElementById('prevDate').innerText = dateVal.replace(/-/g, '/');
+
+        // سطر رقم الهوية
+        const lineClientId = document.getElementById('lineClientId');
+        if(clientIdVal !== '' && docType !== 'شهادة ضمان') {
+            lineClientId.style.display = 'block';
+            document.getElementById('prevClientId').innerText = clientIdVal;
+        } else if(docType === 'شهادة ضمان' && clientIdVal !== '') {
+            lineClientId.style.display = 'block';
+            document.getElementById('prevClientId').innerText = clientIdVal;
+        } else {
+            lineClientId.style.display = 'none';
+        }
+
+        // سطر المشروع
+        const lineProjectName = document.getElementById('lineProjectName');
+        if(projectVal !== '') {
+            lineProjectName.style.display = 'block';
+            document.getElementById('prevProjectName').innerText = projectVal;
+        } else {
+            lineProjectName.style.display = 'none';
+        }
+
+        // سطر الموقع
+        const lineLocation = document.getElementById('lineLocation');
+        if(locationVal !== '') {
+            lineLocation.style.display = 'block';
+            document.getElementById('prevLocation').innerText = locationVal;
+        } else {
+            lineLocation.style.display = 'none';
+        }
+
+        // سطر القطعة والمخطط (خاص بشهادة الضمان وفقط لو تم إدخاله)
+        const linePlot = document.getElementById('linePlot');
+        if(docType === 'شهادة ضمان' && plotVal !== '') {
+            linePlot.style.display = 'block';
+            document.getElementById('prevPlotNum').innerText = plotVal;
+        } else {
+            linePlot.style.display = 'none';
+        }
+
+        // سطر التاريخ
+        const lineDate = document.getElementById('lineDate');
+        if(dateVal) {
+            lineDate.style.display = 'block';
+            document.getElementById('prevDate').innerText = dateVal.replace(/-/g, '/');
+        } else {
+            lineDate.style.display = 'none';
+        }
+
+        // سطر المساحة
+        const lineArea = document.getElementById('lineArea');
+        if(areaVal !== '' && docType !== 'شهادة ضمان') {
+            lineArea.style.display = 'block';
+            document.getElementById('prevArea').innerText = parseFloat(areaVal).toLocaleString();
+            document.getElementById('prevAreaTable').innerText = parseFloat(areaVal).toLocaleString();
+        } else {
+            lineArea.style.display = 'none';
+        }
+
+        // سطر سعر المتر
+        const lineMeterPrice = document.getElementById('lineMeterPrice');
+        if(meterPriceVal !== '' && docType !== 'شهادة ضمان') {
+            lineMeterPrice.style.display = 'block';
+            document.getElementById('prevMeterPrice').innerText = parseFloat(meterPriceVal).toLocaleString('en', {minimumFractionDigits: 2});
+            document.getElementById('prevMeterTable').innerText = parseFloat(meterPriceVal).toLocaleString();
+        } else {
+            lineMeterPrice.style.display = 'none';
+        }
+
+        // سطر مدة التنفيذ
+        const lineExecDays = document.getElementById('lineExecDays');
+        if(execDaysVal !== '' && docType !== 'شهادة ضمان') {
+            lineExecDays.style.display = 'block';
+            document.getElementById('prevExecDays').innerText = execDaysVal;
+        } else {
+            lineExecDays.style.display = 'none';
+        }
+
+        // إخفاء صندوق الـ Meta بالكامل لو كل محتوياته أصبحت مخفية
+        const invoiceMetaBox = document.getElementById('invoiceMetaBox');
+        const hasAnyVisibleMeta = (clientVal !== '' || clientIdVal !== '' || projectVal !== '' || locationVal !== '' || (docType === 'شهادة ضمان' && plotVal !== '') || dateVal || (areaVal !== '' && docType !== 'شهادة ضمان') || (meterPriceVal !== '' && docType !== 'شهادة ضمان') || (execDaysVal !== '' && docType !== 'شهادة ضمان'));
+        
+        if(hasAnyVisibleMeta) {
+            invoiceMetaBox.style.display = 'grid';
+        } else {
+            invoiceMetaBox.style.display = 'none';
+        }
     }
 
     function toggleDocumentFields() {
@@ -815,50 +905,33 @@
         
         const warrantyContainer = document.getElementById('warrantyTermsContainer');
         const financialTitle = document.getElementById('financialTitle');
-        const tableResponsive = document.querySelector('.items-table').parentElement;
-        const totalsSection = document.querySelector('.totals-section');
+        const financialTableWrapper = document.getElementById('financialTableWrapper');
+        const totalsSectionBox = document.getElementById('totalsSectionBox');
         const dynamicExtraSection = document.getElementById('dynamicExtraSection');
         const taxGroupContainer = document.getElementById('taxGroupContainer');
         const clientIdGroup = document.getElementById('clientIdGroup');
         const plotNumGroup = document.getElementById('plotNumGroup');
-        const prevClientIdContainer = document.getElementById('prevClientIdContainer');
-        const prevPlotContainer = document.getElementById('prevPlotContainer');
-        const prevExecContainer = document.getElementById('prevExecContainer');
         const execDaysGroup = document.getElementById('execDaysGroup');
 
         if (docType === 'شهادة ضمان') {
             warrantyContainer.style.display = 'block';
             financialTitle.style.display = 'none';
-            tableResponsive.style.display = 'none';
-            totalsSection.style.display = 'none';
+            financialTableWrapper.style.display = 'none';
+            totalsSectionBox.style.display = 'none';
             dynamicExtraSection.style.display = 'none';
             taxGroupContainer.style.display = 'none';
             clientIdGroup.style.display = 'block';
-            plotNumGroup.style.display = 'block'; // تظهر خانة القطعة والمخطط فقط لشهادة الضمان
-            prevClientIdContainer.style.display = 'block';
-            
-            const plotVal = document.getElementById('plotNum').value.trim();
-            if(plotVal !== '') {
-                prevPlotContainer.style.display = 'block';
-                document.getElementById('prevPlotNum').innerText = plotVal;
-            } else {
-                prevPlotContainer.style.display = 'none';
-            }
-
-            prevExecContainer.style.display = 'none';
+            plotNumGroup.style.display = 'block';
             execDaysGroup.style.display = 'none';
         } else if (docType === 'عقد اتفاق') {
             warrantyContainer.style.display = 'none';
             financialTitle.style.display = 'block';
-            tableResponsive.style.display = 'block';
-            totalsSection.style.display = 'flex';
+            financialTableWrapper.style.display = 'block';
+            totalsSectionBox.style.display = 'flex';
             dynamicExtraSection.style.display = 'block';
             taxGroupContainer.style.display = 'flex';
             clientIdGroup.style.display = 'block';
             plotNumGroup.style.display = 'none';
-            prevClientIdContainer.style.display = 'block';
-            prevPlotContainer.style.display = 'none'; // تختفي تماماً في العقد وعرض السعر
-            prevExecContainer.style.display = 'block';
             execDaysGroup.style.display = 'block';
             
             dynamicExtraSection.innerHTML = `
@@ -871,21 +944,17 @@
                 </ul>
             `;
         } else {
-            // عرض سعر
             warrantyContainer.style.display = 'none';
             financialTitle.style.display = 'block';
-            tableResponsive.style.display = 'block';
-            totalsSection.style.display = 'flex';
+            financialTableWrapper.style.display = 'block';
+            totalsSectionBox.style.display = 'flex';
             dynamicExtraSection.style.display = 'block';
             taxGroupContainer.style.display = 'flex';
             clientIdGroup.style.display = 'block';
             plotNumGroup.style.display = 'none';
-            prevClientIdContainer.style.display = 'block';
-            prevPlotContainer.style.display = 'none'; // تختفي تماماً في عرض السعر
-            prevExecContainer.style.display = 'block';
             execDaysGroup.style.display = 'block';
 
-            const execDaysVal = document.getElementById('execDays').value || '---';
+            const execDaysVal = document.getElementById('execDays').value || '5 أيام عمل';
 
             dynamicExtraSection.innerHTML = `
                 <div class="section-title">رابعاً: شروط الدفعات والمدة</div>
@@ -895,42 +964,31 @@
                 </ul>
             `;
         }
+        updateMetaVisibility();
     }
 
-    // الربط والتحديث الحي المباشر لجميع الحقول والمدخلات
-    document.getElementById('clientName').addEventListener('input', (e) => { document.getElementById('prevClient').innerText = e.target.value || '---'; });
-    document.getElementById('clientIdNum').addEventListener('input', (e) => { document.getElementById('prevClientId').innerText = e.target.value || '---'; });
-    document.getElementById('projectName').addEventListener('input', (e) => { document.getElementById('prevProjectName').innerText = e.target.value || '---'; });
-    document.getElementById('projectLocation').addEventListener('input', (e) => { document.getElementById('prevLocation').innerText = e.target.value || '---'; });
-    
-    document.getElementById('plotNum').addEventListener('input', (e) => { 
-        const val = e.target.value.trim();
-        const prevPlotContainer = document.getElementById('prevPlotContainer');
-        if(val !== '' && document.getElementById('docType').value === 'شهادة ضمان') {
-            prevPlotContainer.style.display = 'block';
-            document.getElementById('prevPlotNum').innerText = val;
-        } else {
-            prevPlotContainer.style.display = 'none';
-        }
-    });
-
-    document.getElementById('execDays').addEventListener('input', (e) => { 
-        const val = e.target.value || '---';
-        document.getElementById('prevExecDays').innerText = val;
+    // الاستماع لجميع الحقول لتحديث الحذف الديناميكي التلقائي
+    document.getElementById('clientName').addEventListener('input', updateMetaVisibility);
+    document.getElementById('clientIdNum').addEventListener('input', updateMetaVisibility);
+    document.getElementById('projectName').addEventListener('input', updateMetaVisibility);
+    document.getElementById('projectLocation').addEventListener('input', updateMetaVisibility);
+    document.getElementById('plotNum').addEventListener('input', updateMetaVisibility);
+    document.getElementById('execDays').addEventListener('input', (e) => {
+        updateMetaVisibility();
         if(document.getElementById('docType').value === 'عرض سعر') {
             toggleDocumentFields();
         }
     });
-    
-    document.getElementById('quoteDate').addEventListener('input', (e) => { formatDateDisplay(e.target.value); });
-    
+    document.getElementById('quoteDate').addEventListener('input', updateMetaVisibility);
+    document.getElementById('projectArea').addEventListener('input', updateMetaVisibility);
+    document.getElementById('meterPrice').addEventListener('input', updateMetaVisibility);
+
     document.getElementById('projectDesc').addEventListener('input', (e) => {
-        const val = e.target.value || 'لم يتم إدخال وصف العمل بعد...';
+        const val = e.target.value || '';
         document.getElementById('prevTableDesc').innerText = val;
         document.getElementById('tableItemDesc').innerText = val.split('\n')[0] || 'تنفيذ أعمال العزل';
     });
 
-    // تحديث الملاحظات الإضافية الحية
     document.getElementById('projectNotes').addEventListener('input', (e) => {
         const val = e.target.value.trim();
         const notesContainer = document.getElementById('notesContainer');
@@ -943,14 +1001,12 @@
     });
 
     function updateCalculations() {
-        const area = parseFloat(document.getElementById('projectArea').value) || 0;
-        const meterPrice = parseFloat(document.getElementById('meterPrice').value) || 0;
+        const areaField = document.getElementById('projectArea').value.trim();
+        const priceField = document.getElementById('meterPrice').value.trim();
+        
+        const area = parseFloat(areaField) || 0;
+        const meterPrice = parseFloat(priceField) || 0;
         const includeTax = document.getElementById('taxCheckbox').checked;
-
-        document.getElementById('prevArea').innerText = area.toLocaleString();
-        document.getElementById('prevAreaTable').innerText = area.toLocaleString();
-        document.getElementById('prevMeterPrice').innerText = meterPrice.toLocaleString('en', {minimumFractionDigits: 2});
-        document.getElementById('prevMeterTable').innerText = meterPrice.toLocaleString();
 
         const subTotal = area * meterPrice;
         document.getElementById('subTotalText').innerText = subTotal.toLocaleString('en', {minimumFractionDigits: 2});
@@ -969,6 +1025,7 @@
         }
 
         document.getElementById('grandTotal').innerText = grandTotal.toLocaleString('en', {minimumFractionDigits: 2}) + ' ر.س';
+        updateMetaVisibility();
     }
 
     document.getElementById('projectArea').addEventListener('input', updateCalculations);
