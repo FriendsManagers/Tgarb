@@ -2,83 +2,206 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>حرب الفضاء</title>
-    <style>
-        body { margin: 0; background: #000; overflow: hidden; }
-        #game-area { width: 100vw; height: 75vh; position: relative; background: #000; }
-        
-        /* تنسيق الصور */
-        .obj { position: absolute; width: 60px; height: 60px; }
-        .bomb { width: 40px; height: 40px; }
-        #explosion { width: 100px; height: 100px; display: none; position: absolute; z-index: 10; }
-
-        .controls { display: flex; justify-content: space-between; padding: 10px; height: 25vh; align-items: center; }
-        .btn { width: 120px; height: 100px; border: 2px solid white; background: transparent; color: white; font-size: 30px; }
-        .btn:active { background: white; color: black; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة عقود وتقارير المقاولات الذكية</title>
+    <!-- Tailwind CSS لتصميم أنيق -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- مكتبة توليد الـ PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
-<body>
+<body class="bg-gray-100 font-sans p-4">
 
-    <div id="game-area">
-        <img src="pngtree-colorful-toy-rocket-ship-close-up-png-image_19054213.webp" id="player" class="obj" style="bottom: 20px; left: 50%;">
-        <img src="pngtree-colorful-toy-spacecraft-model-image-png-image_19471246.webp" id="enemy" class="obj" style="top: 10px; left: 50%;">
-        <img src="pngtree-nuclear-bomb-explosion-png-image_13017489.png" id="explosion">
-    </div>
+    <div class="container mx-auto max-w-4xl">
+        <header class="bg-blue-600 text-white p-6 rounded-lg shadow-md mb-6 text-center">
+            <h1 class="text-2xl font-bold">منصة وثائق وعقود المقاولات الذكية</h1>
+            <p class="text-sm mt-2">أنشئ عقودك وضماناتك وتقاريرك بضغطة زر واحفظها في قاعدة البيانات</p>
+        </header>
 
-    <div class="controls">
-        <button class="btn" onmousedown="startMove('left')" onmouseup="stopMove()" ontouchstart="startMove('left')" ontouchend="stopMove()">◀</button>
-        <button class="btn" onmousedown="startMove('right')" onmouseup="stopMove()" ontouchstart="startMove('right')" ontouchend="stopMove()">▶</button>
-    </div>
-
-    <script>
-        let player = document.getElementById('player');
-        let enemy = document.getElementById('enemy');
-        let explosion = document.getElementById('explosion');
-        let playerPos = 50, enemyPos = 50, moveDir = null;
-
-        function startMove(dir) { moveDir = dir; }
-        function stopMove() { moveDir = null; }
-
-        function gameLoop() {
-            if (moveDir === 'left' && playerPos > 0) playerPos -= 1.5;
-            if (moveDir === 'right' && playerPos < 90) playerPos += 1.5;
-            player.style.left = playerPos + '%';
+        <!-- نموذج إدخال البيانات -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700 border-b pb-2">بيانات المستند والعميل</h2>
             
-            // العدو يتبع اللاعب
-            enemyPos += (playerPos - enemyPos) * 0.05;
-            enemy.style.left = enemyPos + '%';
-            requestAnimationFrame(gameLoop);
-        }
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">نوع المستند</label>
+                    <select id="docType" class="mt-1 w-full p-2 border rounded-md">
+                        <option value="عقد تنفيذ أعمال">عقد تنفيذ أعمال</option>
+                        <option value="شهادة ضمان أعمال عزل">شهادة ضمان أعمال عزل</option>
+                        <option value="تقرير زيارة فنية وكشف تسرب">تقرير زيارة فنية وكشف تسرب</option>
+                        <option value="عرض سعر">عرض سعر</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">اسم العميل</label>
+                    <input type="text" id="clientName" placeholder="مثال: أحمد محمد" class="mt-1 w-full p-2 border rounded-md">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">عنوان الموقع / المشروع</label>
+                    <input type="text" id="clientAddress" placeholder="مثال: الرياض، حي الياسمين" class="mt-1 w-full p-2 border rounded-md">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">اسم الفني أو المهندس المسؤول</label>
+                    <input type="text" id="technicianName" placeholder="مثال: المهندس خالد" class="mt-1 w-full p-2 border rounded-md">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">السعر الإجمالي (ريال/جنيه)</label>
+                    <input type="number" id="totalPrice" placeholder="مثال: 5000" class="mt-1 w-full p-2 border rounded-md">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">مدة الضمان (إن وجدت)</label>
+                    <input type="text" id="warrantyPeriod" placeholder="مثال: 10 سنوات" class="mt-1 w-full p-2 border rounded-md">
+                </div>
+            </div>
 
-        function fire() {
-            let bomb = document.createElement('img');
-            bomb.src = 'pngtree-nuclear-bomb-icon-png-image_4485470.png';
-            bomb.className = 'bomb obj';
-            bomb.style.left = enemyPos + '%';
-            bomb.style.top = '70px';
-            document.getElementById('game-area').appendChild(bomb);
+            <div class="mt-4">
+                <div class="flex justify-between items-center mb-1">
+                    <label class="block text-sm font-medium text-gray-600">تفاصيل الخدمة أو البنود الفنية</label>
+                    <button onclick="generateWithAI()" type="button" class="text-xs bg-purple-600 text-white px-3 py-1 rounded hover:bg-purple-700 transition">✨ صياغة تلقائية بالذكاء الاصطناعي</button>
+                </div>
+                <textarea id="serviceDetails" rows="3" placeholder="اكتب تفاصيل العمل أو اضغط على الزر أعلاه ليقوم الذكاء الاصطناعي بكتابتها..." class="w-full p-2 border rounded-md"></textarea>
+            </div>
 
-            let bTop = 70;
-            let fall = setInterval(() => {
-                bTop += 5;
-                bomb.style.top = bTop + 'px';
-                
-                let pRect = player.getBoundingClientRect();
-                let bRect = bomb.getBoundingClientRect();
-                if (bRect.bottom > pRect.top && bRect.left < pRect.right && bRect.right > pRect.left) {
-                    // إظهار الانفجار
-                    explosion.style.left = player.style.left;
-                    explosion.style.top = (window.innerHeight * 0.6) + 'px';
-                    explosion.style.display = 'block';
-                    clearInterval(fall);
-                    setTimeout(() => location.reload(), 1000);
-                }
-                if (bTop > window.innerHeight) { bomb.remove(); clearInterval(fall); }
-            }, 20);
-        }
+            <button onclick="saveAndGeneratePDF()" class="mt-6 w-full bg-green-600 text-white p-3 rounded-md font-bold hover:bg-green-700 transition">
+                حفظ في قاعدة البيانات وتصدير PDF 📄
+            </button>
+        </div>
+    </div>
 
-        setInterval(fire, 800);
-        gameLoop();
+    <!-- قالب المعاينة المخفي لتوليد الـ PDF -->
+    <div id="pdfContent" class="bg-white p-8 rounded-lg shadow-md border hidden max-w-2xl mx-auto">
+        <div class="flex justify-between items-center border-b pb-4 mb-4">
+            <div>
+                <h3 id="previewDocTitle" class="text-xl font-bold text-blue-800">عقد تنفيذ</h3>
+                <p class="text-xs text-gray-500 mt-1">رقم المستند: <span id="docNumber">CON-9842</span></p>
+            </div>
+            <div class="text-left">
+                <h4 class="font-bold text-gray-700">شركة المقاولات النموذجية</h4>
+                <p class="text-xs text-gray-500">هاتف: 0500000000</p>
+            </div>
+        </div>
+        <div class="mb-4 text-sm space-y-2">
+            <p><strong>اسم العميل:</strong> <span id="pClient"></span></p>
+            <p><strong>العنوان:</strong> <span id="pAddress"></span></p>
+            <p><strong>المسؤول الميداني:</strong> <span id="pTech"></span></p>
+            <p><strong>مدة الضمان:</strong> <span id="pWarranty"></span></p>
+        </div>
+        <div class="border-t border-b py-4 my-4">
+            <h4 class="font-bold mb-2 text-gray-700">تفاصيل البنود والخدمة:</h4>
+            <p id="pDetails" class="text-gray-600 text-sm whitespace-pre-line"></p>
+        </div>
+        <div class="flex justify-between items-center mt-8 pt-4 border-t">
+            <div>
+                <p class="text-sm font-bold">التكلفة الإجمالية:</p>
+                <p class="text-lg font-bold text-blue-600"><span id="pPrice"></span></p>
+            </div>
+            <div class="text-center">
+                <p class="text-xs text-gray-500 mb-2">ختم وتوقيع الشركة</p>
+                <div class="border-b-2 border-dashed w-32 pb-1 text-xs text-gray-400">معتمد رسمياً</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- كود الجافاسكريبت والربط -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // إعدادات فايربيز الخاصة بك
+        const firebaseConfig = {
+          apiKey: "AIzaSyA5SS93zdj5N8oBMmjPgWvfSohdSBIRQ8c",
+          authDomain: "friends7777.firebaseapp.com",
+          projectId: "friends7777",
+          storageBucket: "friends7777.appspot.com",
+          messagingSenderId: "123456789",
+          appId: "1:123456789:web:abcdef123456"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // مفتاح جيميناي الخاص بك (قم بوضع مفتاحك هنا بين العلامتين)
+        const GEMINI_API_KEY = "ضع_مفتاح_جيميناي_هنا";
+
+        // دالة الذكاء الاصطناعي لكتابة النصوص
+        window.generateWithAI = async function() {
+            const docType = document.getElementById('docType').value;
+            const clientName = document.getElementById('clientName').value || 'عميل';
+            
+            if(GEMINI_API_KEY.includes("ضع_مفتاح")) {
+                alert("AQ.Ab8RN6LwKMBGCqeOtSqHZZzhaVwwy9lGeEXXefwL2sSKPyleDA");
+                return;
+            }
+
+            alert("جاري التوليد بواسطة الذكاء الاصطناعي...");
+            
+            try {
+                const response = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+                const prompt = `اكتب بنود تفصيلية احترافية لـ ${docType} موجهة للعميل ${clientName}، اجعل النص منسقاً وجاهزاً لعقد مقاولات أو تقرير فني.`;
+
+                const res = await fetch(response, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                });
+
+                const data = await res.json();
+                const text = data.candidates[0].content.parts[0].text;
+                document.getElementById('serviceDetails').value = text;
+            } catch (error) {
+                alert("حدث خطأ أثناء الاتصال بالذكاء الاصطناعي، تأكد من صحة المفتاح.");
+            }
+        };
+
+        // دالة الحفظ في قاعدة البيانات وتصدير الـ PDF
+        window.saveAndGeneratePDF = async function() {
+            const docType = document.getElementById('docType').value;
+            const clientName = document.getElementById('clientName').value;
+            const clientAddress = document.getElementById('clientAddress').value;
+            const technicianName = document.getElementById('technicianName').value;
+            const totalPrice = document.getElementById('totalPrice').value;
+            const warrantyPeriod = document.getElementById('warrantyPeriod').value;
+            const serviceDetails = document.getElementById('serviceDetails').value;
+
+            if(!clientName || !totalPrice) {
+                alert('الرجاء إدخال اسم العميل والسعر على الأقل!');
+                return;
+            }
+
+            // 1. حفظ المستند في فايربيز (Firestore)
+            try {
+                await addDoc(collection(db, "documents"), {
+                    docType, clientName, clientAddress, technicianName, totalPrice, warrantyPeriod, serviceDetails,
+                    createdAt: new Date()
+                });
+            } catch (e) {
+                console.error("خطأ في الحفظ بقاعدة البيانات: ", e);
+            }
+
+            // 2. تعبئة بيانات المعاينة للـ PDF
+            document.getElementById('previewDocTitle').innerText = docType;
+            document.getElementById('pClient').innerText = clientName;
+            document.getElementById('pAddress').innerText = clientAddress;
+            document.getElementById('pTech').innerText = technicianName;
+            document.getElementById('pWarranty').innerText = warrantyPeriod || "لا يوجد";
+            document.getElementById('pDetails').innerText = serviceDetails;
+            document.getElementById('pPrice').innerText = totalPrice + " ريال";
+
+            const element = document.getElementById('pdfContent');
+            element.classList.remove('hidden');
+
+            const opt = {
+                margin: 10,
+                filename: docType + '_' + clientName + '.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().from(element).set(opt).save().then(() => {
+                element.classList.add('hidden');
+                alert("تم حفظ المستند في قاعدة البيانات وتحميل ملف الـ PDF بنجاح! 🎉");
+            });
+        };
     </script>
 </body>
 </html>
