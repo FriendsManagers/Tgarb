@@ -390,7 +390,7 @@
 <body>
 
 <div class="container">
-    <!-- توقيع المطور في أول الموقع كما طلبت (إنجليزي ثم عربي) -->
+    <!-- توقيع المطور في أول الموقع -->
     <div style="text-align: center; padding: 8px; font-size: 12px; font-weight: bold; color: var(--primary); background: #e0f2fe; border-radius: 8px; margin-bottom: 10px;">
         <div>Created by Eng. Mohamed Abu El-Kheir</div>
         <div>تم الإنشاء بواسطة المهندس / محمد أبو الخير</div>
@@ -447,7 +447,7 @@
         </form>
     </div>
 
-    <!-- إدخال تفاصيل المشروع والمستند (بدون قيم افتراضية داخل الخانات عدا الاسم) -->
+    <!-- إدخال تفاصيل المشروع والمستند (القيم الافتراضية المطلوبة، خالية مادة الاسم) -->
     <div class="card">
         <h2>إنشاء وتخصيص المستند الجديد</h2>
         <div class="form-grid">
@@ -461,32 +461,32 @@
             </div>
             <div class="form-group">
                 <label>اسم العميل (المستفيد)</label>
-                <!-- اسم العميل محتفظ بقيمته الافتراضية كما طلبت -->
-                <input type="text" id="clientName" value="محمد مخفور بشر اليامي" placeholder="مثال: محمد مخفور بشر اليامي">
+                <!-- الاسم الوحيد الثابت كما طلبْت -->
+                <input type="text" id="clientName" value="محمد أحمر" placeholder="محمد أحمر">
             </div>
             <div class="form-group" id="clientIdGroup">
                 <label>رقم الهوية / السجل للعميل</label>
-                <input type="text" id="clientIdNum" value="" placeholder="مثال: 1057713867">
+                <input type="text" id="clientIdNum" value="123456789" placeholder="123456789">
             </div>
             <div class="form-group">
                 <label>اسم المشروع / وصف عام</label>
-                <input type="text" id="projectName" value="" placeholder="مثال: عزل فوم لسطح الخاص بمول رويال سنتر">
+                <input type="text" id="projectName" value="عزل أسطح" placeholder="عزل أسطح">
             </div>
             <div class="form-group">
                 <label>موقع المشروع / المدينة</label>
-                <input type="text" id="projectLocation" value="" placeholder="مثال: نجران">
+                <input type="text" id="projectLocation" value="الرياض" placeholder="الرياض">
             </div>
             <div class="form-group" id="plotNumGroup" style="display:none;">
                 <label>رقم قطعة الأرض / المخطط (لشهادة الضمان فقط)</label>
-                <input type="text" id="plotNum" value="" placeholder="مثال: قطعة: 1/21/766 - مخطط: 3020">
+                <input type="text" id="plotNum" value="" placeholder="قطعة: 1/21/766">
             </div>
             <div class="form-group">
                 <label>المساحة الإجمالية (بالمتر المربع)</label>
-                <input type="number" id="projectArea" value="" placeholder="مثال: 14000">
+                <input type="number" id="projectArea" value="250" placeholder="250">
             </div>
             <div class="form-group">
                 <label>سعر المتر (ر.س)</label>
-                <input type="number" id="meterPrice" value="" placeholder="مثال: 33">
+                <input type="number" id="meterPrice" value="20" placeholder="20">
             </div>
             <div class="form-group">
                 <label>تاريخ المستند</label>
@@ -494,11 +494,20 @@
             </div>
             <div class="form-group" id="execDaysGroup">
                 <label>مدة التنفيذ (أيام عمل)</label>
-                <input type="text" id="execDays" value="" placeholder="مثال: 25 يوم عمل">
+                <input type="text" id="execDays" value="5 أيام عمل" placeholder="5 أيام عمل">
             </div>
             <div class="form-group" style="grid-column: 1 / -1;">
                 <label>نطاق وخطوات العمل (البند / التفاصيل الفنية)</label>
-                <textarea id="projectDesc" rows="4" placeholder="أدخل تفاصيل وبنود العمل هنا..."></textarea>
+                <textarea id="projectDesc" rows="6">1- تنظيف السطح: تنظيف كامل السطح من الأتربة والشوائب لضمان جودة الالتصاق.
+2- الطبقة الأولى: تنفيذ طبقة أولى من مادة عزل الفوم بولي يوريثان.
+3- الطبقة الثانية: تنفيذ طبقة ثانية من مادة عزل الفوم لضمان التغطية والسماكة المطلوبة.
+4- طبقة الحماية: تنفيذ طبقة نهائية من مادة الإكريليك لحماية العزل من العوامل الجوية.
+5- يتم تقديم ضمان 10 سنوات.</textarea>
+            </div>
+            <!-- خانة الملاحظات الإضافية كما طلبت -->
+            <div class="form-group" style="grid-column: 1 / -1;">
+                <label>ملاحظات إضافية (اختياري)</label>
+                <textarea id="projectNotes" rows="2" placeholder="أضف أي ملاحظات إضافية هنا لتظهر في المستند..."></textarea>
             </div>
         </div>
         
@@ -540,25 +549,35 @@
 
                 <div class="invoice-meta" id="invoiceMetaBox">
                     <div>
-                        <p><strong>مقدم إلى السيد:</strong> <span id="prevClient">محمد مخفور بشر اليامي</span> المحترم،,,</p>
-                        <p id="prevClientIdContainer" style="display:none;"><strong>رقم الهوية:</strong> <span id="prevClientId">---</span></p>
-                        <p><strong>المشروع:</strong> <span id="prevProjectName">---</span></p>
-                        <p><strong>الموقع:</strong> <span id="prevLocation">---</span></p>
-                        <!-- رقم القطعة والمخطط يظهر فقط عند كتابته وفي شهادة الضمان وإذا ترك فارغاً لا يظهر -->
+                        <p><strong>مقدم إلى السيد:</strong> <span id="prevClient">محمد أحمر</span> المحترم،,,</p>
+                        <p id="prevClientIdContainer"><strong>رقم الهوية:</strong> <span id="prevClientId">123456789</span></p>
+                        <p><strong>المشروع:</strong> <span id="prevProjectName">عزل أسطح</span></p>
+                        <p><strong>الموقع:</strong> <span id="prevLocation">الرياض</span></p>
+                        <!-- رقم القطعة والمخطط يظهر فقط إذا كتب فيها ولم تترك فارغة وفي شهادة الضمان -->
                         <p id="prevPlotContainer" style="display:none;"><strong>رقم القطعة / المخطط:</strong> <span id="prevPlotNum">---</span></p>
                     </div>
                     <div>
                         <p><strong>التاريخ:</strong> <span id="prevDate">---</span></p>
-                        <p><strong>مساحة المشروع:</strong> <span id="prevArea">0</span> م²</p>
-                        <p><strong>سعر المتر:</strong> <span id="prevMeterPrice">0.00</span> ر.س</p>
-                        <p id="prevExecContainer"><strong>مدة التنفيذ:</strong> <span id="prevExecDays">---</span></p>
+                        <p><strong>مساحة المشروع:</strong> <span id="prevArea">250</span> م²</p>
+                        <p><strong>سعر المتر:</strong> <span id="prevMeterPrice">20.00</span> ر.س</p>
+                        <p id="prevExecContainer"><strong>مدة التنفيذ:</strong> <span id="prevExecDays">5 أيام عمل</span></p>
                     </div>
                 </div>
 
                 <!-- نطاق العمل -->
                 <div class="section-title" id="scopeTitle">أولاً: نطاق وخطوات العمل والمواصفات الفنية</div>
                 <div style="font-size: 13px; margin-bottom: 12px; white-space: pre-line; line-height: 1.6;" id="prevTableDesc">
-لم يتم إدخال وصف العمل بعد...
+1- تنظيف السطح: تنظيف كامل السطح من الأتربة والشوائب لضمان جودة الالتصاق.
+2- الطبقة الأولى: تنفيذ طبقة أولى من مادة عزل الفوم بولي يوريثان.
+3- الطبقة الثانية: تنفيذ طبقة ثانية من مادة عزل الفوم لضمان التغطية والسماكة المطلوبة.
+4- طبقة الحماية: تنفيذ طبقة نهائية من مادة الإكريليك لحماية العزل من العوامل الجوية.
+5- يتم تقديم ضمان 10 سنوات.
+                </div>
+
+                <!-- قسم الملاحظات الإضافية يظهر هنا عند كتابتها -->
+                <div id="notesContainer" style="display:none; margin-bottom: 12px;">
+                    <div style="font-size: 13px; font-weight: bold; color: var(--primary); margin-bottom: 3px;">ملاحظات هامة:</div>
+                    <div style="font-size: 13px; white-space: pre-line; background: #f8fafc; padding: 8px; border-radius: 6px; border: 1px dashed var(--border-color);" id="prevNotesText"></div>
                 </div>
 
                 <!-- الجدول المالي -->
@@ -578,11 +597,11 @@
                         <tbody>
                             <tr>
                                 <td>1</td>
-                                <td><span id="tableItemDesc">تنفيذ أعمال العزل</span></td>
+                                <td><span id="tableItemDesc">تنفيذ أعمال عزل الأسطح المتفق عليها</span></td>
                                 <td>م²</td>
-                                <td><span id="prevAreaTable">0</span></td>
-                                <td><span id="prevMeterTable">0</span> ر.س</td>
-                                <td><span id="subTotalText">0.00</span></td>
+                                <td><span id="prevAreaTable">250</span></td>
+                                <td><span id="prevMeterTable">20</span> ر.س</td>
+                                <td><span id="subTotalText">5,000.00</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -593,15 +612,15 @@
                     <div class="totals-box">
                         <div class="totals-row">
                             <span>المجموع الفرعي:</span>
-                            <span id="subTotal">0.00 ر.س</span>
+                            <span id="subTotal">5,000.00 ر.س</span>
                         </div>
                         <div class="totals-row" id="taxRow">
                             <span>ضريبة القيمة المضافة (15%):</span>
-                            <span id="taxTotal">0.00 ر.س</span>
+                            <span id="taxTotal">750.00 ر.س</span>
                         </div>
                         <div class="totals-row final">
                             <span>الإجمالي الشامل:</span>
-                            <span id="grandTotal">0.00 ر.س</span>
+                            <span id="grandTotal">5,750.00 ر.س</span>
                         </div>
                     </div>
                 </div>
@@ -644,7 +663,7 @@
                     </div>
                 </div>
 
-                <!-- تم إزالة الـ URL الخاص بالموقع كما طلبت تماماً وتعديله لتظهر حقوق التطوير أدناه -->
+                <!-- حقوق التطوير وخلو الـ URL كما طلبت -->
                 <div class="creator-watermark">
                     <div>Created by Eng. Mohamed Abu El-Kheir</div>
                     <div>تم الإنشاء بواسطة المهندس / محمد أبو الخير</div>
@@ -819,10 +838,9 @@
             dynamicExtraSection.style.display = 'none';
             taxGroupContainer.style.display = 'none';
             clientIdGroup.style.display = 'block';
-            plotNumGroup.style.display = 'block'; // تظهر خانة الإدخال لشهادة الضمان
+            plotNumGroup.style.display = 'block'; // تظهر خانة القطعة والمخطط فقط لشهادة الضمان
             prevClientIdContainer.style.display = 'block';
             
-            // إدارة ظهور رقم القطعة والمخطط (تظهر فقط إذا كتب فيها ولم تترك فارغة)
             const plotVal = document.getElementById('plotNum').value.trim();
             if(plotVal !== '') {
                 prevPlotContainer.style.display = 'block';
@@ -841,7 +859,7 @@
             dynamicExtraSection.style.display = 'block';
             taxGroupContainer.style.display = 'flex';
             clientIdGroup.style.display = 'block';
-            plotNumGroup.style.display = 'none'; // تختفي في العقد
+            plotNumGroup.style.display = 'none';
             prevClientIdContainer.style.display = 'block';
             prevPlotContainer.style.display = 'none'; // تختفي تماماً في العقد وعرض السعر
             prevExecContainer.style.display = 'block';
@@ -865,7 +883,7 @@
             dynamicExtraSection.style.display = 'block';
             taxGroupContainer.style.display = 'flex';
             clientIdGroup.style.display = 'block';
-            plotNumGroup.style.display = 'none'; // تختفي في عرض السعر
+            plotNumGroup.style.display = 'none';
             prevClientIdContainer.style.display = 'block';
             prevPlotContainer.style.display = 'none'; // تختفي تماماً في عرض السعر
             prevExecContainer.style.display = 'block';
@@ -916,6 +934,18 @@
         document.getElementById('tableItemDesc').innerText = val.split('\n')[0] || 'تنفيذ أعمال العزل';
     });
 
+    // تحديث الملاحظات الإضافية الحية
+    document.getElementById('projectNotes').addEventListener('input', (e) => {
+        const val = e.target.value.trim();
+        const notesContainer = document.getElementById('notesContainer');
+        if(val !== '') {
+            notesContainer.style.display = 'block';
+            document.getElementById('prevNotesText').innerText = val;
+        } else {
+            notesContainer.style.display = 'none';
+        }
+    });
+
     function updateCalculations() {
         const area = parseFloat(document.getElementById('projectArea').value) || 0;
         const meterPrice = parseFloat(document.getElementById('meterPrice').value) || 0;
@@ -950,26 +980,18 @@
     document.getElementById('taxCheckbox').addEventListener('change', updateCalculations);
 
     async function generateAIProposal() {
-        const area = document.getElementById('projectArea').value;
-        const docType = document.getElementById('docType').value;
-        const projectName = document.getElementById('projectName').value || 'أعمال العزل';
-
-        if(!area) {
-            alert('يرجى إدخال المساحة أولاً!');
-            return;
-        }
-
-        const smartText = `​1- تنظيف السطح: تنظيف كامل السطح من الأتربة والشوائب لضمان جودة الالتصاق.
+        const area = document.getElementById('projectArea').value || '250';
+        const smartText = `1- تنظيف السطح: تنظيف كامل السطح من الأتربة والشوائب لضمان جودة الالتصاق.
 2- الطبقة الأولى: تنفيذ طبقة أولى من مادة عزل الفوم بولي يوريثان.
-3- الطبقة الثانية: تنفيذ طبقة ثانية من مادة عزل الفوم لضمان التغطية والسماكة المطلوبة.
+3- الطبقة الثانية: تنفيذ طبقة ثانية من مادة عزل الفوم لضمان التغطية والسماكة المطلوبة بمساحة ${area} متر مربع.
 4- طبقة الحماية: تنفيذ طبقة نهائية من مادة الإكريليك لحماية العزل من العوامل الجوية.
-5- يتم تقديم ضمان 10 سنوات.${docType}.`;
+5- يتم تقديم ضمان 10 سنوات.`;
 
         document.getElementById('projectDesc').value = smartText;
         document.getElementById('prevTableDesc').innerText = smartText;
-        document.getElementById('tableItemDesc').innerText = `تنفيذ أعمال عزل الفوم المائي والحراري لمشروع ${projectName}`;
+        document.getElementById('tableItemDesc').innerText = `تنفيذ أعمال عزل الفوم المائي والحراري`;
         
-        alert('تمت صياغة تفاصيل وبنود العمل بدقة بناءً على نماذج المؤسسة بنجاح!');
+        alert('تم تحديث بنود العمل بالصيغة المطلوبة بنجاح!');
     }
 </script>
 
