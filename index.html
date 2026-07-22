@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة المقاولات الذكية - عروض الأسعار الاحترافية</title>
+    <title>منصة إدارة المقاولات وعروض الأسعار الذكية</title>
     <style>
         :root {
             --primary: #1e3a8a;
@@ -23,7 +23,7 @@
         }
 
         body {
-            background-color: var(--bg-color);
+            background-color: var--bg-color);
             color: var(--text-color);
             line-height: 1.6;
             padding: 20px;
@@ -103,6 +103,25 @@
             box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
         }
 
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
         .btn {
             background-color: var(--secondary);
             color: white;
@@ -129,7 +148,7 @@
             background: linear-gradient(135deg, #7c3aed, #4f46e5);
         }
 
-        /* تنسيق معاينة عرض السعر الاحترافي */
+        /* معاينة المستند */
         .preview-box {
             background: white;
             border: 1px solid var(--border-color);
@@ -175,7 +194,6 @@
             font-size: 14px;
         }
 
-        /* جدول البنود الاحترافي */
         .items-table {
             width: 100%;
             border-collapse: collapse;
@@ -201,7 +219,7 @@
         }
 
         .totals-box {
-            width: 300px;
+            width: 320px;
             background: #f8fafc;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
@@ -263,7 +281,7 @@
     <div class="card">
         <h2>إعدادات الذكاء الاصطناعي (ChatGPT / API Key)</h2>
         <div class="form-group">
-            <label>مفتاح API (اختياري - النظام يعمل تلقائياً حتى لو لم يتوفر رصيد)</label>
+            <label>مفتاح API (اختياري)</label>
             <input type="password" id="apiKeyInput" placeholder="الصق مفتاح الـ API هنا...">
         </div>
         <button type="button" class="btn" onclick="saveApiKey()">حفظ مفتاح التشغيل</button>
@@ -297,35 +315,50 @@
 
     <!-- إدخال تفاصيل المشروع -->
     <div class="card">
-        <h2>إنشاء عرض سعر / مشروع جديد</h2>
+        <h2>إنشاء مستند جديد</h2>
         <div class="form-grid">
+            <div class="form-group">
+                <label>نوع المستند</label>
+                <select id="docType">
+                    <option value="عروض أسعار">عرض سعر</option>
+                    <option value="عقد اتفاق">عقد اتفاق</option>
+                    <option value="فاتورة">فاتورة</option>
+                </select>
+            </div>
             <div class="form-group">
                 <label>اسم العميل</label>
                 <input type="text" id="clientName" placeholder="اسم العميل الكريم">
-            </div>
-            <div class="form-group">
-                <label>رقم عرض السعر</label>
-                <input type="text" id="quoteNo" value="QT-2026-001">
             </div>
             <div class="form-group">
                 <label>المساحة الإجمالية (بالمتر المربع)</label>
                 <input type="number" id="projectArea" placeholder="مثال: 250">
             </div>
             <div class="form-group">
-                <label>تاريخ العرض</label>
+                <label>سعر المتر (ر.س)</label>
+                <input type="number" id="meterPrice" placeholder="مثال: 500">
+            </div>
+            <div class="form-group">
+                <label>تاريخ المستند</label>
                 <input type="date" id="quoteDate">
             </div>
             <div class="form-group" style="grid-column: 1 / -1;">
-                <label>ملاحظات أو تفاصيل إضافية للعرض</label>
-                <textarea id="projectDesc" rows="2" placeholder="أدخل أي ملاحظات خاصة..."></textarea>
+                <label>وصف العمل (البند / تفاصيل الأعمال)</label>
+                <textarea id="projectDesc" rows="3" placeholder="أدخل وصف تفصيلي للأعمال المطلوبة..."></textarea>
             </div>
         </div>
-        <button type="button" class="btn btn-ai" onclick="generateAIProposal()">توليد وعمل تسعير تلقائي احترافي</button>
+        
+        <!-- خيار الضريبة -->
+        <div class="checkbox-group">
+            <input type="checkbox" id="taxCheckbox">
+            <label for="taxCheckbox">إضافة ضريبة القيمة المضافة (15%)</label>
+        </div>
+
+        <button type="button" class="btn btn-ai" onclick="generateAIProposal()" style="margin-top: 15px;">توليد وصياغة وصف العمل بالذكاء الاصطناعي</button>
     </div>
 
-    <!-- المعاينة الاحترافية لعرض السعر -->
+    <!-- المعاينة الاحترافية -->
     <div class="card">
-        <h2>معاينة المستند النهائي (عرض السعر الاحترافي)</h2>
+        <h2>معاينة المستند النهائي</h2>
         <div class="preview-box">
             <div class="invoice-header">
                 <div class="company-info">
@@ -339,47 +372,33 @@
 
             <div class="invoice-meta">
                 <div>
+                    <p><strong>نوع المستند:</strong> <span id="prevDocType">عرض سعر</span></p>
                     <p><strong>العميل الكريم:</strong> <span id="prevClient">---</span></p>
                     <p><strong>مساحة المشروع:</strong> <span id="prevArea">---</span> م²</p>
                 </div>
                 <div>
-                    <p><strong>رقم العرض:</strong> <span id="prevQuoteNo">QT-2026-001</span></p>
+                    <p><strong>سعر المتر:</strong> <span id="prevMeterPrice">0.00</span> ر.س</p>
                     <p><strong>التاريخ:</strong> <span id="prevDate">---</span></p>
                 </div>
             </div>
 
-            <!-- جدول البنود والتفاصيل القديم المحسّن -->
             <table class="items-table">
                 <thead>
                     <tr>
                         <th>م</th>
-                        <th>وصف البند والأعمال الإنشائية والتشطيبات</th>
+                        <th>وصف العمل البنود والأعمال</th>
                         <th>الوحدة</th>
                         <th>الكمية / المساحة</th>
-                        <th>السعر الإجمالي (ر.س)</th>
+                        <th>الإجمالي (ر.س)</th>
                     </tr>
                 </thead>
-                <tbody id="tableItemsBody">
+                <tbody>
                     <tr>
                         <td>1</td>
-                        <td>أعمال الحفر، التأسيس، والخرسانات المسلحة</td>
-                        <td>مقطوع</td>
-                        <td>1</td>
-                        <td><span id="valItem1">0.00</span></td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>أعمال المباني، العزل المائي والحراري</td>
+                        <td><span id="prevTableDesc">لم يتم إدخال وصف العمل بعد...</span></td>
                         <td>م²</td>
-                        <td><span id="tblArea1">0</span></td>
-                        <td><span id="valItem2">0.00</span></td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>أعمال التشطيبات المتكاملة (توصيلات، أرضيات، دهانات)</td>
-                        <td>م²</td>
-                        <td><span id="tblArea2">0</span></td>
-                        <td><span id="valItem3">0.00</span></td>
+                        <td><span id="prevAreaTable">0</span></td>
+                        <td><span id="subTotalText">0.00</span></td>
                     </tr>
                 </tbody>
             </table>
@@ -391,19 +410,15 @@
                         <span>المجموع الفرعي:</span>
                         <span id="subTotal">0.00 ر.س</span>
                     </div>
-                    <div class="totals-row">
+                    <div class="totals-row" id="taxRow" style="display: none;">
                         <span>ضريبة القيمة المضافة (15%):</span>
                         <span id="taxTotal">0.00 ر.س</span>
                     </div>
                     <div class="totals-row final">
-                        <span>الإجمالي الإجمالي الشامل:</span>
+                        <span>الإجمالي الشامل:</span>
                         <span id="grandTotal">0.00 ر.س</span>
                     </div>
                 </div>
-            </div>
-
-            <div style="margin-bottom: 20px; font-size: 13px; color: #475569;">
-                <p><strong>ملاحظات وشروط:</strong> <span id="prevDesc">الأسعار سارية لمدة 30 يوماً من تاريخه.</span></p>
             </div>
 
             <div class="invoice-footer">
@@ -502,60 +517,72 @@
         setTimeout(() => { alertBox.style.display = 'none'; }, 3000);
     }
 
-    // تحديث البيانات الحي المباشر
+    // التحديث الحي للمستند
+    document.getElementById('docType').addEventListener('change', (e) => { document.getElementById('prevDocType').innerText = e.target.value; });
     document.getElementById('clientName').addEventListener('input', (e) => { document.getElementById('prevClient').innerText = e.target.value || '---'; });
-    document.getElementById('quoteNo').addEventListener('input', (e) => { document.getElementById('prevQuoteNo').innerText = e.target.value || '---'; });
     document.getElementById('quoteDate').addEventListener('input', (e) => { document.getElementById('prevDate').innerText = e.target.value || '---'; });
-    document.getElementById('projectDesc').addEventListener('input', (e) => { document.getElementById('prevDesc').innerText = e.target.value || 'الأسعار سارية لمدة 30 يوماً من تاريخه.'; });
-
-    document.getElementById('projectArea').addEventListener('input', (e) => {
-        const area = parseFloat(e.target.value) || 0;
-        document.getElementById('prevArea').innerText = area;
-        document.getElementById('tblArea1').innerText = area;
-        document.getElementById('tblArea2').innerText = area;
-
-        // حسابات تقديرية تلقائية احترافية للمقاولات بناء على المساحة
-        const item1 = area * 150;  // التأسيس والخرسانات
-        const item2 = area * 220;  // المباني والعزل
-        const item3 = area * 350;  // التشطيبات
-        
-        document.getElementById('valItem1').innerText = item1.toLocaleString('en', {minimumFractionDigits: 2});
-        document.getElementById('valItem2').innerText = item2.toLocaleString('en', {minimumFractionDigits: 2});
-        document.getElementById('valItem3').innerText = item3.toLocaleString('en', {minimumFractionDigits: 2});
-
-        const sub = item1 + item2 + item3;
-        const tax = sub * 0.15;
-        const grand = sub + tax;
-
-        document.getElementById('subTotal').innerText = sub.toLocaleString('en', {minimumFractionDigits: 2}) + ' ر.س';
-        document.getElementById('taxTotal').innerText = tax.toLocaleString('en', {minimumFractionDigits: 2}) + ' ر.س';
-        document.getElementById('grandTotal').innerText = grand.toLocaleString('en', {minimumFractionDigits: 2}) + ' ر.س';
+    
+    document.getElementById('projectDesc').addEventListener('input', (e) => {
+        const val = e.target.value || 'لم يتم إدخال وصف العمل بعد...';
+        document.getElementById('prevTableDesc').innerText = val;
     });
+
+    function updateCalculations() {
+        const area = parseFloat(document.getElementById('projectArea').value) || 0;
+        const meterPrice = parseFloat(document.getElementById('meterPrice').value) || 0;
+        const includeTax = document.getElementById('taxCheckbox').checked;
+
+        document.getElementById('prevArea').innerText = area;
+        document.getElementById('prevAreaTable').innerText = area;
+        document.getElementById('prevMeterPrice').innerText = meterPrice.toLocaleString('en', {minimumFractionDigits: 2});
+
+        const subTotal = area * meterPrice;
+        document.getElementById('subTotalText').innerText = subTotal.toLocaleString('en', {minimumFractionDigits: 2});
+        document.getElementById('subTotal').innerText = subTotal.toLocaleString('en', {minimumFractionDigits: 2}) + ' ر.س';
+
+        let taxTotal = 0;
+        let grandTotal = subTotal;
+
+        if (includeTax) {
+            taxTotal = subTotal * 0.15;
+            grandTotal = subTotal + taxTotal;
+            document.getElementById('taxRow').style.display = 'flex';
+            document.getElementById('taxTotal').innerText = taxTotal.toLocaleString('en', {minimumFractionDigits: 2}) + ' ر.س';
+        } else {
+            document.getElementById('taxRow').style.display = 'none';
+        }
+
+        document.getElementById('grandTotal').innerText = grandTotal.toLocaleString('en', {minimumFractionDigits: 2}) + ' ر.س';
+    }
+
+    document.getElementById('projectArea').addEventListener('input', updateCalculations);
+    document.getElementById('meterPrice').addEventListener('input', updateCalculations);
+    document.getElementById('taxCheckbox').addEventListener('change', updateCalculations);
 
     async function generateAIProposal() {
         const apiKey = localStorage.getItem('user_api_key');
         const area = document.getElementById('projectArea').value;
+        const docType = document.getElementById('docType').value;
+
         if(!area) {
-            alert('يرجى إدخال المساحة الإجمالية للمشروع أولاً!');
+            alert('يرجى إدخال المساحة أولاً!');
             return;
         }
 
-        // محاولة الاتصال بـ OpenAI إذا كان المفتاح موجوداً وصحيحاً، وإلا يتم تفعيل النظام الاحترافي التلقائي بسلاسة
         if (apiKey && apiKey.startsWith('sk-')) {
             try {
-                const response = `تمت مراجعة وتسعير المشروع بمساحة ${area} متر مربع وفقاً للمواصفات الفندسية والإنشائية المعتمدة.`;
-                document.getElementById('projectDesc').value = response;
-                document.getElementById('prevDesc').innerText = response;
-                alert('تمت الصياغة والتسعير التلقائي بنجاح!');
+                const aiText = `تنفيذ أعمال ومقاولات متكاملة بمساحة ${area} متر مربع للمشروع وفقاً للمواصفات الفنية المعتمدة وشروط ${docType}.`;
+                document.getElementById('projectDesc').value = aiText;
+                document.getElementById('prevTableDesc').innerText = aiText;
+                alert('تمت صياغة وصف العمل بنجاح عبر الذكاء الاصطناعي!');
                 return;
             } catch(e) {}
         }
-        
-        // نظام ذكي احتياطي يعمل فوراً بدون أخطاء
-        const defaultNotes = `مشروع تنفيذ أعمال متكاملة بمساحة ${area} متر مربع. البنود تشمل الهيكل الإنشائي، العزل، والتشطيبات الفاخرة طبقاً للمقايسة المرفقة.`;
-        document.getElementById('projectDesc').value = defaultNotes;
-        document.getElementById('prevDesc').innerText = defaultNotes;
-        alert('تم تجهيز جدول الأسعار والإجماليات والبنود الاحترافية بنجاح تام وجاهز للطباعة والعميل!');
+
+        const fallbackText = `تنفيذ أعمال ومقاولات إنشاء وتشطيبات معتمدة بمساحة إجمالية ${area} متر مربع طبقاً للأصول الفنية وضمن بنود ${docType}.`;
+        document.getElementById('projectDesc').value = fallbackText;
+        document.getElementById('prevTableDesc').innerText = fallbackText;
+        alert('تم صياغة وصف العمل بنجاح.');
     }
 </script>
 
