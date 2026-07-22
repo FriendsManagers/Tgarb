@@ -71,6 +71,7 @@
             border-bottom: 2px solid #f1f5f9;
         }
 
+        /* نظام الجريد الديناميكي للحانات */
         .form-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -84,7 +85,15 @@
             header p { font-size: 14px; }
             .card { padding: 25px; margin-bottom: 25px; }
             .card h2 { font-size: 18px; }
-            .form-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+            
+            .form-grid { 
+                grid-template-columns: repeat(2, 1fr); 
+                gap: 15px; 
+            }
+            /* جعل العناصر التي تحتاج عرض كامل تأخذ السطر كاملاً */
+            .form-group.full-width {
+                grid-column: span 2;
+            }
         }
 
         .form-group {
@@ -489,7 +498,17 @@
                 <label>مدة التنفيذ (أيام عمل)</label>
                 <input type="text" id="execDays" placeholder="اتركه فارغاً ليختفي تماماً...">
             </div>
-            <div class="form-group" id="descGroupWrapper" style="grid-column: 1 / -1;">
+            
+            <!-- حقل الدفعات والتحكم بها -->
+            <div class="form-group full-width" id="paymentTermsGroup">
+                <label>نظام وطريقة السداد (الدفعات)</label>
+                <textarea id="paymentTermsInput" rows="3">- 50% دفعة مقدمة عند التعاقد.
+- 25% عند الانتهاء من 50% من الأعمال.
+- 10% عند الانتهاء من 75% من الأعمال.
+- 15% عند الانتهاء الكامل من الأعمال وتسليم المشروع.</textarea>
+            </div>
+
+            <div class="form-group full-width" id="descGroupWrapper">
                 <label>نطاق وخطوات العمل (البند / التفاصيل الفنية)</label>
                 <textarea id="projectDesc" rows="6">1- تنظيف السطح: تنظيف كامل السطح من الأتربة والشوائب لضمان جودة الالتصاق.
 2- الطبقة الأولى: تنفيذ طبقة أولى من مادة عزل الفوم بولي يوريثان.
@@ -497,7 +516,8 @@
 4- طبقة الحماية: تنفيذ طبقة نهائية من مادة الإكريليك لحماية العزل من العوامل الجوية.
 5- يتم تقديم ضمان 10 سنوات.</textarea>
             </div>
-            <div class="form-group" style="grid-column: 1 / -1;">
+            
+            <div class="form-group full-width">
                 <label>ملاحظات إضافية (اختياري)</label>
                 <textarea id="projectNotes" rows="2" placeholder="أضف أي ملاحظات إضافية هنا لتظهر في المستند..."></textarea>
             </div>
@@ -555,7 +575,7 @@
                 <div id="scopeSectionWrapper">
                     <div class="section-title" id="scopeTitle">أولاً: نطاق وخطوات العمل والمواصفات الفنية</div>
                     <div style="font-size: 13px; margin-bottom: 12px; white-space: pre-line; line-height: 1.6;" id="prevTableDesc">
-1- تنظيف السطح: تنظيف كامل السطح من الأتربة والشواءب لضمان جودة الالتصاق.
+1- تنظيف السطح: تنظيف كامل السطح من الأتربة والشوائب لضمان جودة الالتصاق.
 2- الطبقة الأولى: تنفيذ طبقة أولى من مادة عزل الفوم بولي يوريثان.
 3- الطبقة الثانية: تنفيذ طبقة ثانية من مادة عزل الفوم لضمان التغطية والسماكة المطلوبة.
 4- طبقة الحماية: تنفيذ طبقة نهائية من مادة الإكريليك لحماية العزل من العوامل الجوية.
@@ -802,7 +822,6 @@
         const execDaysVal = document.getElementById('execDays').value.trim();
         const docType = document.getElementById('docType').value;
 
-        // سطر العميل
         const lineClient = document.getElementById('lineClient');
         if(clientVal !== '') {
             lineClient.style.display = 'block';
@@ -811,7 +830,6 @@
             lineClient.style.display = 'none';
         }
 
-        // سطر رقم الهوية
         const lineClientId = document.getElementById('lineClientId');
         if(clientIdVal !== '') {
             lineClientId.style.display = 'block';
@@ -820,7 +838,6 @@
             lineClientId.style.display = 'none';
         }
 
-        // سطر المشروع
         const lineProjectName = document.getElementById('lineProjectName');
         if(projectVal !== '') {
             lineProjectName.style.display = 'block';
@@ -829,7 +846,6 @@
             lineProjectName.style.display = 'none';
         }
 
-        // سطر الموقع
         const lineLocation = document.getElementById('lineLocation');
         if(locationVal !== '') {
             lineLocation.style.display = 'block';
@@ -838,7 +854,6 @@
             lineLocation.style.display = 'none';
         }
 
-        // سطر القطعة والمخطط
         const linePlot = document.getElementById('linePlot');
         if(docType === 'شهادة ضمان' && plotVal !== '') {
             linePlot.style.display = 'block';
@@ -847,7 +862,6 @@
             linePlot.style.display = 'none';
         }
 
-        // سطر التاريخ
         const lineDate = document.getElementById('lineDate');
         if(dateVal) {
             lineDate.style.display = 'block';
@@ -856,7 +870,6 @@
             lineDate.style.display = 'none';
         }
 
-        // سطر المساحة
         const lineArea = document.getElementById('lineArea');
         if(areaVal !== '' && docType !== 'شهادة ضمان') {
             lineArea.style.display = 'block';
@@ -866,7 +879,6 @@
             lineArea.style.display = 'none';
         }
 
-        // سطر سعر المتر
         const lineMeterPrice = document.getElementById('lineMeterPrice');
         if(meterPriceVal !== '' && docType !== 'شهادة ضمان') {
             lineMeterPrice.style.display = 'block';
@@ -876,7 +888,6 @@
             lineMeterPrice.style.display = 'none';
         }
 
-        // سطر مدة التنفيذ
         const lineExecDays = document.getElementById('lineExecDays');
         if(execDaysVal !== '' && docType !== 'شهادة ضمان') {
             lineExecDays.style.display = 'block';
@@ -909,6 +920,7 @@
         const areaGroupWrapper = document.getElementById('areaGroupWrapper');
         const meterPriceGroupWrapper = document.getElementById('meterPriceGroupWrapper');
         const descGroupWrapper = document.getElementById('descGroupWrapper');
+        const paymentTermsGroup = document.getElementById('paymentTermsGroup');
         const aiBtn = document.getElementById('aiBtn');
 
         if (docType === 'شهادة ضمان') {
@@ -922,29 +934,8 @@
             areaGroupWrapper.style.display = 'none';
             meterPriceGroupWrapper.style.display = 'none';
             descGroupWrapper.style.display = 'none';
+            paymentTermsGroup.style.display = 'none';
             aiBtn.style.display = 'none';
-        } else if (docType === 'عقد اتفاق') {
-            warrantyContainer.style.display = 'none';
-            financialSectionWrapper.style.display = 'block';
-            scopeSectionWrapper.style.display = 'block';
-            dynamicExtraSection.style.display = 'block';
-            taxGroupContainer.style.display = 'flex';
-            plotNumGroup.style.display = 'none';
-            execDaysGroup.style.display = 'block';
-            areaGroupWrapper.style.display = 'block';
-            meterPriceGroupWrapper.style.display = 'block';
-            descGroupWrapper.style.display = 'block';
-            aiBtn.style.display = 'block';
-            
-            dynamicExtraSection.innerHTML = `
-                <div class="section-title">ثالثاً: نظام وطريقة السداد ودفعات المستحقات</div>
-                <ul class="terms-list">
-                    <li><strong>50%</strong> دفعة مقدمة عند التعاقد.</li>
-                    <li><strong>25%</strong> عند الانتهاء من 50% من الأعمال.</li>
-                    <li><strong>10%</strong> عند الانتهاء من 75% من الأعمال.</li>
-                    <li><strong>15%</strong> عند الانتهاء الكامل من الأعمال وتسليم المشروع.</li>
-                </ul>
-            `;
         } else {
             warrantyContainer.style.display = 'none';
             financialSectionWrapper.style.display = 'block';
@@ -956,32 +947,39 @@
             areaGroupWrapper.style.display = 'block';
             meterPriceGroupWrapper.style.display = 'block';
             descGroupWrapper.style.display = 'block';
+            paymentTermsGroup.style.display = 'block';
             aiBtn.style.display = 'block';
 
-            const execDaysVal = document.getElementById('execDays').value || '5 أيام عمل';
-
-            dynamicExtraSection.innerHTML = `
-                <div class="section-title">رابعاً: شروط الدفعات والمدة</div>
-                <ul class="terms-list">
-                    <li><strong>50%</strong> دفعة مقدمة عند التعاقد. | <strong>25%</strong> عند 50% من الأعمال. | <strong>10%</strong> عند 75%. | <strong>15%</strong> عند التسليم النهائي.</li>
-                    <li><strong>مدة التنفيذ:</strong> ${execDaysVal} من تاريخ استلام الموقع ودفعة المقدمة.</li>
-                </ul>
-            `;
+            updatePaymentTermsPreview();
         }
         updateMetaVisibility();
     }
+
+    function updatePaymentTermsPreview() {
+        const termsText = document.getElementById('paymentTermsInput').value.trim();
+        const docType = document.getElementById('docType').value;
+        const dynamicExtraSection = document.getElementById('dynamicExtraSection');
+        
+        if(docType !== 'شهادة ضمان') {
+            const title = docType === 'عقد اتفاق' ? 'ثالثاً: نظام وطريقة السداد ودفعات المستحقات' : 'رابعاً: شروط الدفعات والمدة';
+            const lines = termsText.split('\n').map(line => `<li>${line}</li>`).join('');
+            dynamicExtraSection.innerHTML = `
+                <div class="section-title">${title}</div>
+                <ul class="terms-list">
+                    ${lines}
+                </ul>
+            `;
+        }
+    }
+
+    document.getElementById('paymentTermsInput').addEventListener('input', updatePaymentTermsPreview);
 
     document.getElementById('clientName').addEventListener('input', updateMetaVisibility);
     document.getElementById('clientIdNum').addEventListener('input', updateMetaVisibility);
     document.getElementById('projectName').addEventListener('input', updateMetaVisibility);
     document.getElementById('projectLocation').addEventListener('input', updateMetaVisibility);
     document.getElementById('plotNum').addEventListener('input', updateMetaVisibility);
-    document.getElementById('execDays').addEventListener('input', (e) => {
-        updateMetaVisibility();
-        if(document.getElementById('docType').value === 'عرض سعر') {
-            toggleDocumentFields();
-        }
-    });
+    document.getElementById('execDays').addEventListener('input', updateMetaVisibility);
     document.getElementById('quoteDate').addEventListener('input', updateMetaVisibility);
     document.getElementById('projectArea').addEventListener('input', updateMetaVisibility);
     document.getElementById('meterPrice').addEventListener('input', updateMetaVisibility);
