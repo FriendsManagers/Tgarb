@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منصة إدارة المقاولات وعروض الأسعار الذكية</title>
+    <!-- مكتبة تصدير PDF حقيقية -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
             --primary: #1e3a8a;
@@ -44,15 +46,8 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        header h1 {
-            font-size: 18px;
-            margin-bottom: 5px;
-        }
-
-        header p {
-            font-size: 12px;
-            color: #94a3b8;
-        }
+        header h1 { font-size: 18px; margin-bottom: 5px; }
+        header p { font-size: 12px; color: #94a3b8; }
 
         .card {
             background: var(--card-bg);
@@ -84,20 +79,11 @@
             header p { font-size: 14px; }
             .card { padding: 25px; margin-bottom: 25px; }
             .card h2 { font-size: 18px; }
-            
-            .form-grid { 
-                grid-template-columns: repeat(2, 1fr); 
-                gap: 15px; 
-            }
-            
-            .form-group.full-width {
-                grid-column: span 2;
-            }
+            .form-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+            .form-group.full-width { grid-column: span 2; }
         }
 
-        .form-group {
-            margin-bottom: 10px;
-        }
+        .form-group { margin-bottom: 10px; }
 
         label {
             display: block;
@@ -129,17 +115,8 @@
             margin-top: 10px;
         }
 
-        .checkbox-group input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-        }
-
-        .checkbox-group label {
-            margin-bottom: 0;
-            cursor: pointer;
-            font-size: 14px;
-        }
+        .checkbox-group input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; }
+        .checkbox-group label { margin-bottom: 0; cursor: pointer; font-size: 14px; }
 
         .btn {
             background-color: var(--secondary);
@@ -153,28 +130,31 @@
             width: 100%;
             transition: background 0.2s;
         }
+        .btn:hover { background-color: #0f766e; }
 
-        .btn:hover {
-            background-color: #0f766e;
-        }
+        .btn-danger { background-color: #ef4444; padding: 6px 10px; font-size: 12px; width: auto; }
+        .btn-danger:hover { background-color: #dc2626; }
 
-        .btn-ai {
-            background: linear-gradient(135deg, #8b5cf6, #6366f1);
-            margin-top: 10px;
-        }
+        .btn-action { background: linear-gradient(135deg, #f59e0b, #d97706); margin-top: 10px; }
+        .btn-action:hover { background: linear-gradient(135deg, #d97706, #b45309); }
 
-        .btn-ai:hover {
-            background: linear-gradient(135deg, #7c3aed, #4f46e5);
+        /* لوحة التوقيع الإلكتروني */
+        .signature-pad-container {
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            background: #fff;
+            position: relative;
+            margin-top: 5px;
+            overflow: hidden;
         }
-
-        .btn-print {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            margin-top: 15px;
+        canvas#sigCanvas {
+            width: 100%;
+            height: 120px;
+            touch-action: none;
+            cursor: crosshair;
+            display: block;
         }
-
-        .btn-print:hover {
-            background: linear-gradient(135deg, #d97706, #b45309);
-        }
+        .sig-preview { max-width: 120px; max-height: 60px; object-fit: contain; display: none; }
 
         .preview-container-wrapper {
             width: 100%;
@@ -183,7 +163,6 @@
             border-radius: 12px;
             padding: 10px;
             margin-top: 15px;
-            -webkit-overflow-scrolling: touch;
         }
 
         .zoom-controls {
@@ -204,16 +183,11 @@
             font-weight: bold;
         }
 
-        .zoom-btn:hover {
-            background: #1e293b;
-        }
-
         .preview-box {
             background: white;
             border: 1px solid var(--border-color);
-            padding: 20px;
+            padding: 30px;
             border-radius: 8px;
-            position: relative;
             width: 800px;
             margin: 0 auto;
             transform-origin: top right;
@@ -223,15 +197,9 @@
         }
 
         @media(min-width: 768px) {
-            .preview-container-wrapper {
-                padding: 20px;
-            }
-            .preview-box {
-                transform: scale(1);
-            }
-            .zoom-controls {
-                display: none;
-            }
+            .preview-container-wrapper { padding: 20px; }
+            .preview-box { transform: scale(1); }
+            .zoom-controls { display: none; }
         }
 
         .invoice-header {
@@ -243,22 +211,9 @@
             margin-bottom: 15px;
         }
 
-        .company-info h3 {
-            color: var(--primary);
-            font-size: 20px;
-            margin-bottom: 5px;
-        }
-
-        .company-info p {
-            font-size: 12px;
-            color: #64748b;
-        }
-
-        .company-logo-preview {
-            max-width: 80px;
-            max-height: 80px;
-            object-fit: contain;
-        }
+        .company-info h3 { color: var(--primary); font-size: 20px; margin-bottom: 5px; }
+        .company-info p { font-size: 12px; color: #64748b; }
+        .company-logo-preview { max-width: 80px; max-height: 80px; object-fit: contain; }
 
         .doc-title-banner {
             text-align: center;
@@ -304,52 +259,15 @@
             font-size: 13px;
         }
 
-        .items-table th {
-            background-color: var(--primary);
-            color: white;
-        }
+        .items-table th { background-color: var(--primary); color: white; }
 
-        .totals-section {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 20px;
-        }
+        .totals-section { display: flex; justify-content: flex-end; margin-bottom: 20px; }
+        .totals-box { width: 100%; max-width: 300px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; }
+        .totals-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 13px; }
+        .totals-row.final { border-top: 2px solid var(--primary); padding-top: 6px; font-weight: bold; color: var(--primary); font-size: 15px; }
 
-        .totals-box {
-            width: 100%;
-            max-width: 300px;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 12px;
-        }
-
-        .totals-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 6px;
-            font-size: 13px;
-        }
-
-        .totals-row.final {
-            border-top: 2px solid var(--primary);
-            padding-top: 6px;
-            font-weight: bold;
-            color: var(--primary);
-            font-size: 15px;
-        }
-
-        .terms-list {
-            font-size: 12px;
-            color: #334155;
-            padding-right: 20px;
-            margin-bottom: 15px;
-            line-height: 1.6;
-        }
-
-        .terms-list li {
-            margin-bottom: 4px;
-        }
+        .terms-list { font-size: 12px; color: #334155; padding-right: 20px; margin-bottom: 15px; line-height: 1.6; }
+        .terms-list li { margin-bottom: 4px; }
 
         .invoice-footer {
             display: flex;
@@ -360,53 +278,10 @@
             padding-top: 15px;
         }
 
-        .stamp-preview {
-            max-width: 90px;
-            max-height: 90px;
-            object-fit: contain;
-        }
+        .stamp-preview { max-width: 90px; max-height: 90px; object-fit: contain; }
+        .creator-watermark { text-align: center; margin-top: 20px; padding-top: 10px; border-top: 1px dashed #cbd5e1; font-size: 11px; color: #64748b; }
 
-        .creator-watermark {
-            text-align: center;
-            margin-top: 20px;
-            padding-top: 10px;
-            border-top: 1px dashed #cbd5e1;
-            font-size: 11px;
-            color: #64748b;
-            line-height: 1.4;
-        }
-
-        .alert {
-            padding: 10px 15px;
-            background-color: #d1fae5;
-            color: #065f46;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            font-size: 13px;
-            display: none;
-        }
-
-        /* تنسيق الطباعة الدقيق لحفظ PDF بلا صفحات فارغة */
-        @media print {
-            body * {
-                visibility: hidden;
-            }
-            #printableArea, #printableArea * {
-                visibility: visible;
-            }
-            #printableArea {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                transform: scale(1) !important;
-                box-shadow: none !important;
-                border: none !important;
-                margin: 0 !important;
-                padding: 10px !important;
-                background: white !important;
-            }
-        }
+        .alert { padding: 10px 15px; background-color: #d1fae5; color: #065f46; border-radius: 8px; margin-bottom: 15px; font-size: 13px; display: none; }
     </style>
 </head>
 <body>
@@ -422,44 +297,59 @@
         <p>نظام شامل لإنشاء عروض الأسعار، عقود الاتفاق، وشهادات الضمان للمقاولات</p>
     </header>
 
-    <div id="alertBox" class="alert">تم حفظ الإعدادات بنجاح!</div>
+    <div id="alertBox" class="alert">تم حفظ البيانات بنجاح!</div>
 
+    <!-- إعدادات الشركة -->
     <div class="card">
-        <h2>إعدادات الذكاء الاصطناعي (ChatGPT / API Key)</h2>
-        <div class="form-group">
-            <label>مفتاح API (اختياري)</label>
-            <input type="password" id="apiKeyInput" placeholder="الصق مفتاح الـ API هنا...">
-        </div>
-        <button type="button" class="btn" onclick="saveApiKey()">حفظ مفتاح التشغيل</button>
-    </div>
-
-    <div class="card">
-        <h2>إعدادات بيانات الشركة والمؤسسة</h2>
+        <h2>بيانات الشركة والمؤسسة</h2>
         <form id="companyForm">
             <div class="form-grid" id="companyGrid"></div>
             <button type="submit" class="btn" style="margin-top: 10px;">حفظ بيانات الشركة العامة</button>
         </form>
     </div>
 
+    <!-- إنشاء المستند -->
     <div class="card">
         <h2>إنشاء وتخصيص المستند الجديد</h2>
         <div class="form-grid" id="documentGrid"></div>
         
-        <div class="checkbox-group" id="taxGroupContainer" style="margin-top: 15px;">
-            <input type="checkbox" id="taxCheckbox" checked>
-            <label for="taxCheckbox">إضافة ضريبة القيمة المضافة (15% - شامل السعر أو مضاف)</label>
+        <!-- إدارة بنود الجدول المتعددة -->
+        <div style="margin-top: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h3 style="font-size: 14px; color: var(--primary);">بنود الأعمال والأسعار</h3>
+                <button type="button" class="btn" style="width: auto; padding: 6px 12px; font-size: 12px;" onclick="addTableRow()">+ إضافة بند جديد للجدول</button>
+            </div>
+            <div id="dynamicRowsContainer"></div>
         </div>
 
-        <button type="button" class="btn btn-ai" id="aiBtn" onclick="generateAIProposal()">توليد وتحديث تفاصيل العمل بالذكاء الاصطناعي</button>
+        <!-- خيارات الضريبة والمرونة العالمية -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; align-items: center;">
+            <div class="checkbox-group" id="taxGroupContainer">
+                <input type="checkbox" id="taxCheckbox" checked onchange="updateCalculations()">
+                <label for="taxCheckbox">تفعيل ضريبة القيمة المضافة</label>
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+                <label>نسبة الضريبة المئوية (%)</label>
+                <input type="number" id="taxRateInput" value="15" min="0" max="100" step="0.5" oninput="updateCalculations()">
+            </div>
+        </div>
+
+        <!-- لوحة التوقيع الإلكتروني -->
+        <div class="form-group" style="margin-top: 15px;">
+            <label>التوقيع الإلكتروني (ارسم بإصبعك أو الماوس أدناه):</label>
+            <div class="signature-pad-container">
+                <canvas id="sigCanvas"></canvas>
+            </div>
+            <button type="button" class="btn btn-danger" style="margin-top: 6px;" onclick="clearSignature()">مسح التوقيع وإعادة الرسم</button>
+        </div>
     </div>
 
+    <!-- المعاينة -->
     <div class="card">
-        <!-- تم إزالة نص معاينة المستند النهائي من هنا بناءً على طلبك -->
-        
         <div class="zoom-controls">
-            <button type="button" class="zoom-btn" onclick="zoomIn()">➕ تكبير (Zoom In)</button>
-            <button type="button" class="zoom-btn" onclick="resetZoom()">🔄 الحجم الافتراضي</button>
-            <button type="button" class="zoom-btn" onclick="zoomOut()">➖ تصغير (Zoom Out)</button>
+            <button type="button" class="zoom-btn" onclick="zoomIn()">➕ تكبير</button>
+            <button type="button" class="zoom-btn" onclick="resetZoom()">🔄 الافتراضي</button>
+            <button type="button" class="zoom-btn" onclick="zoomOut()">➖ تصغير</button>
         </div>
 
         <div class="preview-container-wrapper">
@@ -468,8 +358,9 @@
                     <div class="company-info">
                         <h3 id="prevCompName">مؤسسة أقاليم المناهل للمقاولات</h3>
                         <p id="prevCompRegWrap">سجل تجاري رقم: <span id="prevCompReg">1011124700</span></p>
-                        <p id="prevCompActivity">عزل فوم - عزل أسطح - عزل شينكو - عزل خزانات</p>
+                        <p id="prevCompActivity">عزل فوم - عزل أسطح</p>
                         <p id="prevCompCity">الرياض - المملكة العربية السعودية</p>
+                        <p id="prevCompUrlWrap" style="margin-top: 4px;"><a id="prevCompUrlLink" href="#" target="_blank" style="color: var(--secondary); font-size: 11px; text-decoration: none;"></a></p>
                     </div>
                     <div>
                         <img id="prevLogo" class="company-logo-preview" src="" alt="شعار الشركة" style="display:none;">
@@ -479,30 +370,23 @@
                 <div class="doc-title-banner" id="prevDocTitleBanner">عرض سعر</div>
 
                 <div class="invoice-meta" id="invoiceMetaBox">
-                    <div id="metaCol1" style="display: flex; flex-direction: column; gap: 4px;">
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
                         <p id="lineClient" style="display:none;"><strong>مقدم إلى السيد:</strong> <span id="prevClient"></span> المحترم،</p>
                         <p id="lineClientId" style="display:none;"><strong>رقم الهوية:</strong> <span id="prevClientId"></span></p>
                         <p id="lineProjectName" style="display:none;"><strong>المشروع:</strong> <span id="prevProjectName"></span></p>
                         <p id="lineLocation" style="display:none;"><strong>الموقع:</strong> <span id="prevLocation"></span></p>
-                        <p id="linePlot" style="display:none;"><strong>رقم القطعة / المخطط:</strong> <span id="prevPlotNum"></span></p>
+                        <p id="linePlot" style="display:none;"><strong>رقم القطعة:</strong> <span id="prevPlotNum"></span></p>
+                        <p id="linePlan" style="display:none;"><strong>رقم المخطط:</strong> <span id="prevPlanNum"></span></p>
                     </div>
-                    <div id="metaCol2" style="display: flex; flex-direction: column; gap: 4px;">
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
                         <p id="lineDate" style="display:none;"><strong>التاريخ:</strong> <span id="prevDate"></span></p>
-                        <p id="lineArea" style="display:none;"><strong>مساحة المشروع:</strong> <span id="prevArea"></span> م²</p>
-                        <p id="lineMeterPrice" style="display:none;"><strong>سعر المتر:</strong> <span id="prevMeterPrice"></span> ر.س</p>
                         <p id="lineExecDays" style="display:none;"><strong>مدة التنفيذ:</strong> <span id="prevExecDays"></span></p>
                     </div>
                 </div>
 
                 <div id="scopeSectionWrapper">
-                    <div class="section-title" id="scopeTitle">أولاً: نطاق وخطوات العمل والمواصفات الفنية</div>
-                    <div style="font-size: 13px; margin-bottom: 12px; white-space: pre-line; line-height: 1.6;" id="prevTableDesc">
-1- تنظيف السطح: تنظيف كامل السطح من الأتربة والشوائب لضمان جودة الالتصاق.
-2- الطبقة الأولى: تنفيذ طبقة أولى من مادة عزل الفوم بولي يوريثان.
-3- الطبقة الثانية: تنفيذ طبقة ثانية من مادة عزل الفوم لضمان التغطية والسماكة المطلوبة.
-4- طبقة الحماية: تنفيذ طبقة نهائية من مادة الإكريليك لحماية العزل من العوامل الجوية.
-5- يتم تقديم ضمان 10 سنوات.
-                    </div>
+                    <div class="section-title">أولاً: نطاق وخطوات العمل والمواصفات الفنية</div>
+                    <div style="font-size: 13px; margin-bottom: 12px; white-space: pre-line; line-height: 1.6;" id="prevTableDesc"></div>
                 </div>
 
                 <div id="notesContainer" style="display:none; margin-bottom: 12px;">
@@ -511,45 +395,34 @@
                 </div>
 
                 <div id="financialSectionWrapper">
-                    <div class="section-title" id="financialTitle">ثانياً: التفاصيل المالية وجدول الأسعار</div>
-                    <div style="width: 100%; overflow-x: auto; margin-bottom: 15px;" id="financialTableWrapper">
-                        <table class="items-table">
-                            <thead>
-                                <tr>
-                                    <th>م</th>
-                                    <th>بيان الأعمال والمواد المستخدمة</th>
-                                    <th>الوحدة</th>
-                                    <th>الكمية / المساحة</th>
-                                    <th>سعر المتر</th>
-                                    <th>الإجمالي الفرعي (ر.س)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td><span id="tableItemDesc">تنفيذ أعمال عزل الأسطح المتفق عليها</span></td>
-                                    <td>م²</td>
-                                    <td><span id="prevAreaTable">0</span></td>
-                                    <td><span id="prevMeterTable">0</span> ر.س</td>
-                                    <td><span id="subTotalText">0.00</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <div class="section-title">ثانياً: التفاصيل المالية وجدول الأسعار</div>
+                    <table class="items-table">
+                        <thead>
+                            <tr>
+                                <th>م</th>
+                                <th>بيان الأعمال والمواد</th>
+                                <th>الوحدة</th>
+                                <th>الكمية</th>
+                                <th>السعر الفردي</th>
+                                <th>الإجمالي (<span class="currLabel">ر.س</span>)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="previewTableBody"></tbody>
+                    </table>
 
-                    <div class="totals-section" id="totalsSectionBox">
+                    <div class="totals-section">
                         <div class="totals-box">
                             <div class="totals-row">
                                 <span>المجموع الفرعي:</span>
-                                <span id="subTotal">0.00 ر.س</span>
+                                <span><span id="subTotal">0.00</span> <span class="currLabel">ر.س</span></span>
                             </div>
                             <div class="totals-row" id="taxRow">
-                                <span>ضريبة القيمة المضافة (15%):</span>
-                                <span id="taxTotal">0.00 ر.س</span>
+                                <span>ضريبة القيمة المضافة (<span id="taxRateLabel">15</span>%):</span>
+                                <span><span id="taxTotal">0.00</span> <span class="currLabel">ر.س</span></span>
                             </div>
                             <div class="totals-row final">
                                 <span>الإجمالي الشامل:</span>
-                                <span id="grandTotal">0.00 ر.س</span>
+                                <span><span id="grandTotal">0.00</span> <span class="currLabel">ر.س</span></span>
                             </div>
                         </div>
                     </div>
@@ -557,34 +430,21 @@
 
                 <div id="paymentTermsPreviewBox">
                     <div class="section-title" id="paymentPreviewTitle">ثالثاً: نظام وطريقة السداد ودفعات المستحقات</div>
-                    <ul class="terms-list" id="paymentMilestonesList">
-                        <li><strong>50%</strong> دفعة مقدمة عند التعاقد.</li>
-                        <li><strong>25%</strong> عند الانتهاء من 50% من الأعمال.</li>
-                        <li><strong>10%</strong> عند الانتهاء من 75% من الأعمال.</li>
-                        <li><strong>15%</strong> عند الانتهاء الكامل من الأعمال وتسليم المشروع.</li>
-                    </ul>
+                    <ul class="terms-list" id="paymentMilestonesList"></ul>
                 </div>
 
                 <div id="warrantyTermsContainer" style="display:none;">
-                    <div class="section-title">شروط وأحكام شهادة الضمان (10 سنوات):</div>
-                    <ol class="terms-list">
-                        <li><strong>مدة السريان:</strong> تضمن الشركة سلامة مواد العزل وطريقة التنفيذ من العيوب الفنية لمدة ١٠ سنوات ميلادية تبدأ من تاريخ صدور هذه الشهادة.</li>
-                        <li><strong>بند تحديد مواعيد الإصلاح:</strong> في حال ظهور أي خلل مشمول بالضمان، تخضع عملية الإصلاح لجدول المواعيد الفنية الخاص بالشركة، حيث يتم تحديد موعد المعاينة والإصلاح من قبل القسم المختص حصراً.</li>
-                        <li><strong>إخلاء المسؤولية عن الأضرار التبعية:</strong> يقتصر التزام الشركة بموجب هذه الشهادة على معالجة وإصلاح الخلل في طبقة العزل فقط، ولا تتحمل الشركة تحت أي ظرف أية مسؤولية قانونية أو مادية عن التلفيات الناتجة عن تسرب المياه.</li>
-                        <li><strong>المعايير البيئية والجوية:</strong> الضمان لا يشمل الأضرار الناتجة عن القوة القاهرة أو الكوارث الطبيعية مثل الزلازل، الفيضانات، الصواعق، أو العواصف غير الاعتيادية.</li>
-                        <li><strong>التعديلات الإنشائية والطرف الثالث:</strong> يعتبر هذا الضمان لغياً وباطلاً في حال قيام العميل أو أي طرف ثالث بإجراء تعديلات إنشائية، تكسير، تركيب معدات فوق العزل.</li>
-                        <li><strong>السلامة الميكانيكية:</strong> يلتزم العميل بالمحافظة على طبقة العزل من التلف الميكانيكي الناتج عن المشي المتكرر بأدوات حادة أو سحب الأجسام الثقيلة.</li>
-                        <li><strong>بند سداد المستحقات:</strong> تفعيل هذه الشهادة مشروط بسداد كامل القيمة المالية المتفق عليها لأعمال التنفيذ، ولا يعتد بالشهادة في حال وجود مبالغ معلقة بذمة العميل.</li>
-                        <li><strong>النطاق الفني للضمان:</strong> يشمل الضمان التسربات الناتجة عن عيوب في مادة العزل أو سوء التنفيذ، ولا يشمل التسربات الناتجة عن عيوب في السباكة أو المواسير المدفونة.</li>
-                        <li><strong>الفحص الدوري والتبليغ:</strong> يجب على العميل إبلاغ الشركة فور اكتشاف أي تسريب أو خلل، ولا تتحمل الشركة مسؤولية تفاقم الضرر في حال تأخر العميل عن التبليغ لمدة تتجاوز ٧ أيام من تاريخ ظهور المشكلة.</li>
-                        <li><strong>الاستخدام السكني والتجاري:</strong> تم تصميم العزل للاستخدامات المحددة وقت التنفيذ، وأي تغيير في طبيعة استخدام الموقع يؤدي إلى سقوط حق المطالبة بالضمان.</li>
-                    </ol>
+                    <div class="section-title">شروط وأحكام شهادة الضمان:</div>
+                    <div style="font-size: 13px; white-space: pre-line; line-height: 1.6;" id="prevWarrantyText"></div>
                 </div>
 
                 <div class="invoice-footer">
                     <div>
-                        <p style="font-size: 12px; color: #64748b;" id="signAuthText">عناية م / فارس ابوالخير</p>
-                        <p style="font-size: 11px; color: #64748b; margin-top: 3px;">معتمد من الإدارة والمشرف العام</p>
+                        <p style="font-size: 12px; color: #64748b;" id="signAuthText">عناية م / محمد أبو الخير</p>
+                        <p style="font-size: 11px; color: #64748b; margin-top: 3px;" id="prevSignTitle">معتمد من الإدارة والمشرف العام</p>
+                        <div style="margin-top: 10px;">
+                            <img id="prevSigImage" class="sig-preview" alt="التوقيع الإلكتروني">
+                        </div>
                     </div>
                     <div>
                         <img id="prevStamp" class="stamp-preview" src="" alt="ختم المؤسسة" style="display:none;">
@@ -598,78 +458,111 @@
             </div>
         </div>
 
-        <button type="button" class="btn btn-print" onclick="window.print()">حفظ المستند / طباعة PDF احترافي</button>
+        <button type="button" class="btn btn-action" onclick="exportToPDF()">تصدير وتحميل الملف كـ PDF احترافي</button>
+        <button type="button" class="btn" style="margin-top: 10px; background-color: #3b82f6;" onclick="saveProposalToHistory()">حفظ العرض في الأرشيف المحلي</button>
+    </div>
+
+    <!-- الأرشيف -->
+    <div class="card">
+        <h2>أرشيف المستندات المحفوظة مسبقاً</h2>
+        <div id="historyList" style="font-size: 13px; color: #64748b;">لا توجد مستندات محفوظة حتى الآن.</div>
     </div>
 </div>
 
 <script>
     let currentZoom = 0.55;
+    let tableRowsData = [
+        { desc: 'تنفيذ أعمال عزل الأسطح المتفق عليها', unit: 'م²', qty: 100, price: 40 }
+    ];
 
-    function zoomIn() {
-        if (currentZoom < 1.2) {
-            currentZoom += 0.15;
-            applyZoom();
-        }
-    }
+    // إعدادات لوحة التوقيع (Canvas Signature Pad)
+    let canvas, ctx, isDrawing = false;
 
-    function zoomOut() {
-        if (currentZoom > 0.3) {
-            currentZoom -= 0.15;
-            applyZoom();
-        }
-    }
+    window.addEventListener('DOMContentLoaded', () => {
+        initCompanyForm();
+        initDocForm();
+        loadCompanyData();
+        renderInputRows();
+        initSignaturePad();
+        updateCalculations();
+        loadHistory();
+        resetZoom();
+    });
 
-    function resetZoom() {
-        currentZoom = window.innerWidth < 768 ? 0.55 : 1;
-        applyZoom();
-    }
-
-    function applyZoom() {
-        const box = document.getElementById('printableArea');
-        box.style.transform = `scale(${currentZoom})`;
-    }
-
-    function renderSmartGrid(containerId, fields) {
-        const container = document.getElementById(containerId);
-        container.innerHTML = '';
+    function initSignaturePad() {
+        canvas = document.getElementById('sigCanvas');
+        ctx = canvas.getContext('2d');
         
-        const total = fields.length;
-        fields.forEach((field, index) => {
-            const div = document.createElement('div');
-            div.className = 'form-group';
-            
-            if (field.fullWidth || (total % 2 !== 0 && index === total - 1)) {
-                div.classList.add('full-width');
-            }
-            
-            div.innerHTML = `
-                <label>${field.label} ${field.required ? '<span style="color:red">*</span>' : ''}</label>
-                ${field.type === 'textarea' ? 
-                    `<textarea id="${field.id}" rows="${field.rows || 3}" placeholder="${field.placeholder || ''}">${field.value || ''}</textarea>` :
-                    field.type === 'select' ?
-                    `<select id="${field.id}" onchange="${field.onchange || ''}">${field.options}</select>` :
-                    `<input type="${field.type || 'text'}" id="${field.id}" placeholder="${field.placeholder || 'اتركه فارغاً ليختفي تماماً...'}" ${field.value ? `value="${field.value}"` : ''}>`
-                }
-            `;
-            container.appendChild(div);
-        });
+        // ضبط أبعاد الكانفاس بدقة
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+
+        ctx.strokeStyle = '#1e3a8a';
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+
+        const getPos = e => {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+            return { x: clientX - rect.left, y: clientY - rect.top };
+        };
+
+        const startDraw = e => { isDrawing = true; const pos = getPos(e); ctx.beginPath(); ctx.moveTo(pos.x, pos.y); e.preventDefault(); };
+        const draw = e => { if (!isDrawing) return; const pos = getPos(e); ctx.lineTo(pos.x, pos.y); ctx.stroke(); updateSignaturePreview(); e.preventDefault(); };
+        const stopDraw = () => { isDrawing = false; };
+
+        canvas.addEventListener('mousedown', startDraw);
+        canvas.addEventListener('mousemove', draw);
+        window.addEventListener('mouseup', stopDraw);
+
+        canvas.addEventListener('touchstart', startDraw);
+        canvas.addEventListener('touchmove', draw);
+        window.addEventListener('touchend', stopDraw);
     }
 
-    function loadCompanyFields() {
+    function clearSignature() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        updateSignaturePreview();
+    }
+
+    function updateSignaturePreview() {
+        const sigImg = document.getElementById('prevSigImage');
+        // تحقق مما إذا كانت الكانفاس فارغة أم لا
+        const blank = document.createElement('canvas');
+        blank.width = canvas.width;
+        blank.height = canvas.height;
+        
+        if (canvas.toDataURL() === blank.toDataURL()) {
+            sigImg.style.display = 'none';
+            sigImg.src = '';
+        } else {
+            sigImg.src = canvas.toDataURL();
+            sigImg.style.display = 'block';
+        }
+    }
+
+    function zoomIn() { if (currentZoom < 1.2) { currentZoom += 0.15; applyZoom(); } }
+    function zoomOut() { if (currentZoom > 0.3) { currentZoom -= 0.15; applyZoom(); } }
+    function resetZoom() { currentZoom = window.innerWidth < 768 ? 0.55 : 1; applyZoom(); }
+    function applyZoom() { document.getElementById('printableArea').style.transform = `scale(${currentZoom})`; }
+
+    function initCompanyForm() {
         const fields = [
             { label: 'اسم الشركة أو المؤسسة', id: 'compName' },
             { label: 'رقم السجل التجاري', id: 'compReg' },
-            { label: 'نشاط الشركة / التخصصات الفرعية', id: 'compActivity' },
+            { label: 'نشاط الشركة / التخصصات', id: 'compActivity' },
             { label: 'المدينة / الفرع', id: 'compCity' },
+            { label: 'رابط الموقع الإلكتروني', id: 'compUrl' },
+            { label: 'مسؤول التوقيع', id: 'signTitleInput', value: 'معتمد من الإدارة والمشرف العام' },
             { label: 'شعار الشركة (Logo)', id: 'compLogo', type: 'file' },
-            { label: 'ختم وتوقيع المؤسسة', id: 'compStamp', type: 'file' }
+            { label: 'ختم المؤسسة', id: 'compStamp', type: 'file' }
         ];
-        renderSmartGrid('companyGrid', fields);
+        renderGrid('companyGrid', fields);
     }
 
-    function renderDocumentFields() {
+    function initDocForm() {
         const docType = document.getElementById('docType') ? document.getElementById('docType').value : 'عرض سعر';
-        
         let fields = [
             { label: 'نوع المستند', id: 'docType', type: 'select', onchange: 'onDocTypeChange()', options: `
                 <option value="عرض سعر" ${docType==='عرض سعر'?'selected':''}>عرض سعر</option>
@@ -677,387 +570,300 @@
                 <option value="شهادة ضمان" ${docType==='شهادة ضمان'?'selected':''}>شهادة ضمان</option>
             `},
             { label: 'اسم العميل (المستفيد)', id: 'clientName' },
-            { label: 'رقم الهوية / السجل للعميل', id: 'clientIdNum' },
-            { label: 'اسم المشروع / وصف عام', id: 'projectName' },
+            { label: 'رقم الهوية / السجل', id: 'clientIdNum' },
+            { label: 'اسم المشروع', id: 'projectName' },
             { label: 'موقع المشروع / المدينة', id: 'projectLocation' },
-            { label: 'تاريخ المستند', id: 'quoteDate', type: 'date' }
+            { label: 'تاريخ المستند', id: 'quoteDate', type: 'date' },
+            { label: 'رمز العملة المستخدمة (يكتب بحرية مثل: ر.س، درهم، $)', id: 'currencySymbol', value: 'ر.س' }
         ];
 
         if (docType === 'شهادة ضمان') {
-            fields.push({ label: 'رقم قطعة الأرض / المخطط', id: 'plotNum' });
+            fields.push(
+                { label: 'رقم القطعة', id: 'plotNum' },
+                { label: 'رقم المخطط', id: 'planNum' },
+                { label: 'بنود شهادة الضمان', id: 'warrantyText', type: 'textarea', rows: 6, fullWidth: true, value: `1- تضمن الشركة سلامة مواد العزل وطريقة التنفيذ لمدة ١٠ سنوات.\n2- الضمان لا يشمل سوء الاستخدام أو التدخلات الخارجية.` }
+            );
         } else {
             fields.push(
-                { label: 'المساحة الإجمالية (بالمتر المربع)', id: 'projectArea', type: 'number', required: true, placeholder: 'أدخل المساحة الإجمالية (إجباري)...' },
-                { label: 'سعر المتر (ر.س)', id: 'meterPrice', type: 'number', required: true, placeholder: 'أدخل سعر المتر (إجباري)...' },
                 { label: 'مدة التنفيذ (أيام عمل)', id: 'execDays' },
-                { label: 'نظام وطريقة السداد (الدفعات)', id: 'paymentTermsInput', type: 'textarea', rows: 3, fullWidth: true, value: document.getElementById('paymentTermsInput') ? document.getElementById('paymentTermsInput').value : `- 50% دفعة مقدمة عند التعاقد.\n- 25% عند الانتهاء من 50% من الأعمال.\n- 10% عند الانتهاء من 75% من الأعمال.\n- 15% عند الانتهاء الكامل من الأعمال وتسليم المشروع.` },
-                { label: 'نطاق وخطوات العمل والمواصفات الفنية', id: 'projectDesc', type: 'textarea', rows: 6, fullWidth: true, value: document.getElementById('projectDesc') ? document.getElementById('projectDesc').value : `1- تنظيف السطح: تنظيف كامل السطح من الأتربة والشوائب لضمان جودة الالتصاق.\n2- الطبقة الأولى: تنفيذ طبقة أولى من مادة عزل الفوم بولي يوريثان.\n3- الطبقة الثانية: تنفيذ طبقة ثانية من مادة عزل الفوم لضمان التغطية والسماكة المطلوبة.\n4- طبقة الحماية: تنفيذ طبقة نهائية من مادة الإكريليك لحماية العزل من العوامل الجوية.\n5- يتم تقديم ضمان 10 سنوات.` },
-                { label: 'ملاحظات إضافية (اختياري)', id: 'projectNotes', type: 'textarea', rows: 2, fullWidth: true, value: document.getElementById('projectNotes') ? document.getElementById('projectNotes').value : '' }
+                { label: 'نظام الدفعات والسداد', id: 'paymentTermsInput', type: 'textarea', rows: 3, fullWidth: true, value: `- 50% دفعة مقدمة عند التعاقد.\n- 50% عند الاستلام النهائي والتسليم.` },
+                { label: 'نطاق وخطوات العمل والمواصفات', id: 'projectDesc', type: 'textarea', rows: 4, fullWidth: true, value: `1- تنظيف السطح بالكامل.\n2- تنفيذ طبقات العزل المطلوبة بدقة عالية.\n3- اختبار المياة أو الفحص النهائي.` },
+                { label: 'ملاحظات إضافية', id: 'projectNotes', type: 'textarea', rows: 2, fullWidth: true }
             );
         }
-
-        renderSmartGrid('documentGrid', fields);
-        bindDocumentEvents();
-        toggleDocumentFieldsUI();
+        renderGrid('documentGrid', fields);
+        bindDocEvents();
+        toggleUI();
     }
 
-    function onDocTypeChange() {
-        renderDocumentFields();
-        updateCalculations();
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-        loadCompanyFields();
-        loadCompanyData();
-        renderDocumentFields();
-
-        const savedKey = localStorage.getItem('user_api_key');
-        if(savedKey) {
-            document.getElementById('apiKeyInput').value = savedKey;
-        }
-        
-        updateCalculations();
-        
-        if(window.innerWidth < 768) {
-            currentZoom = 0.55;
-            applyZoom();
-        } else {
-            currentZoom = 1;
-            applyZoom();
-        }
-    });
-
-    function saveApiKey() {
-        const key = document.getElementById('apiKeyInput').value.trim();
-        localStorage.setItem('user_api_key', key);
-        alert('تم حفظ إعدادات التشغيل بنجاح!');
-    }
-
-    const companyForm = document.getElementById('companyForm');
-    companyForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const name = document.getElementById('compName').value;
-        const reg = document.getElementById('compReg').value;
-        const activity = document.getElementById('compActivity').value;
-        const city = document.getElementById('compCity').value;
-        const logoFile = document.getElementById('compLogo').files[0];
-        const stampFile = document.getElementById('compStamp').files[0];
-
-        const saveData = (logoBase64, stampBase64) => {
-            const data = {
-                name: name,
-                reg: reg,
-                activity: activity,
-                city: city,
-                logo: logoBase64 || (JSON.parse(localStorage.getItem('company_data') || '{}').logo) || '',
-                stamp: stampBase64 || (JSON.parse(localStorage.getItem('company_data') || '{}').stamp) || ''
-            };
-            localStorage.setItem('company_data', JSON.stringify(data));
-            loadCompanyData();
-            showAlert();
-        };
-
-        let logoBase64 = null;
-        let stampBase64 = null;
-        let pendingReads = 0;
-
-        if (logoFile) {
-            pendingReads++;
-            const reader = new FileReader();
-            reader.onload = function(e) { logoBase64 = e.target.result; pendingReads--; if(pendingReads === 0) saveData(logoBase64, stampBase64); };
-            reader.readAsDataURL(logoFile);
-        }
-        if (stampFile) {
-            pendingReads++;
-            const reader = new FileReader();
-            reader.onload = function(e) { stampBase64 = e.target.result; pendingReads--; if(pendingReads === 0) saveData(logoBase64, stampBase64); };
-            reader.readAsDataURL(stampFile);
-        }
-        if (pendingReads === 0) saveData(null, null);
-    });
-
-    function loadCompanyData() {
-        const saved = localStorage.getItem('company_data');
-        if (saved) {
-            const data = JSON.parse(saved);
-            if(data.name && document.getElementById('compName')) { document.getElementById('compName').value = data.name; document.getElementById('prevCompName').innerText = data.name; }
-            if(data.reg && document.getElementById('compReg')) { 
-                document.getElementById('compReg').value = data.reg; 
-                document.getElementById('prevCompReg').innerText = data.reg;
-                document.getElementById('prevCompRegWrap').style.display = 'block';
-            } else if(document.getElementById('prevCompRegWrap')) {
-                document.getElementById('prevCompRegWrap').style.display = 'none';
-            }
-            if(data.activity && document.getElementById('compActivity')) { document.getElementById('compActivity').value = data.activity; document.getElementById('prevCompActivity').innerText = data.activity; document.getElementById('prevCompActivity').style.display = 'block'; }
-            if(data.city && document.getElementById('compCity')) { document.getElementById('compCity').value = data.city; document.getElementById('prevCompCity').innerText = data.city; document.getElementById('prevCompCity').style.display = 'block'; }
-
-            if (data.logo) {
-                const logoImg = document.getElementById('prevLogo');
-                logoImg.src = data.logo;
-                logoImg.style.display = 'block';
-            }
-            if (data.stamp) {
-                const stampImg = document.getElementById('prevStamp');
-                stampImg.src = data.stamp;
-                stampImg.style.display = 'block';
-            }
-        }
-    }
-
-    function showAlert() {
-        const alertBox = document.getElementById('alertBox');
-        alertBox.style.display = 'block';
-        setTimeout(() => { alertBox.style.display = 'none'; }, 3000);
-    }
-
-    function updateMetaVisibility() {
-        const clientInput = document.getElementById('clientName');
-        const clientIdInput = document.getElementById('clientIdNum');
-        const projectInput = document.getElementById('projectName');
-        const locationInput = document.getElementById('projectLocation');
-        const plotInput = document.getElementById('plotNum');
-        const dateInput = document.getElementById('quoteDate');
-        const areaInput = document.getElementById('projectArea');
-        const meterInput = document.getElementById('meterPrice');
-        const execInput = document.getElementById('execDays');
-        
-        const docType = document.getElementById('docType').value;
-
-        const clientVal = clientInput ? clientInput.value.trim() : '';
-        const clientIdVal = clientIdInput ? clientIdInput.value.trim() : '';
-        const projectVal = projectInput ? projectInput.value.trim() : '';
-        const locationVal = locationInput ? locationInput.value.trim() : '';
-        const plotVal = plotInput ? plotInput.value.trim() : '';
-        const dateVal = dateInput ? dateInput.value : '';
-        const areaVal = areaInput ? areaInput.value.trim() : '';
-        const meterVal = meterInput ? meterInput.value.trim() : '';
-        const execVal = execInput ? execInput.value.trim() : '';
-
-        const lineClient = document.getElementById('lineClient');
-        if(clientVal !== '') {
-            lineClient.style.display = 'block';
-            document.getElementById('prevClient').innerText = clientVal;
-        } else {
-            lineClient.style.display = 'none';
-        }
-
-        const lineClientId = document.getElementById('lineClientId');
-        if(clientIdVal !== '') {
-            lineClientId.style.display = 'block';
-            document.getElementById('prevClientId').innerText = clientIdVal;
-        } else {
-            lineClientId.style.display = 'none';
-        }
-
-        const lineProjectName = document.getElementById('lineProjectName');
-        if(projectVal !== '') {
-            lineProjectName.style.display = 'block';
-            document.getElementById('prevProjectName').innerText = projectVal;
-        } else {
-            lineProjectName.style.display = 'none';
-        }
-
-        const lineLocation = document.getElementById('lineLocation');
-        if(locationVal !== '') {
-            lineLocation.style.display = 'block';
-            document.getElementById('prevLocation').innerText = locationVal;
-        } else {
-            lineLocation.style.display = 'none';
-        }
-
-        const linePlot = document.getElementById('linePlot');
-        if(docType === 'شهادة ضمان' && plotVal !== '') {
-            linePlot.style.display = 'block';
-            document.getElementById('prevPlotNum').innerText = plotVal;
-        } else if(linePlot) {
-            linePlot.style.display = 'none';
-        }
-
-        const lineDate = document.getElementById('lineDate');
-        if(dateVal) {
-            lineDate.style.display = 'block';
-            document.getElementById('prevDate').innerText = dateVal.replace(/-/g, '/');
-        } else {
-            lineDate.style.display = 'none';
-        }
-
-        const lineArea = document.getElementById('lineArea');
-        if(areaVal !== '' && docType !== 'شهادة ضمان') {
-            lineArea.style.display = 'block';
-            document.getElementById('prevArea').innerText = parseFloat(areaVal).toLocaleString();
-            document.getElementById('prevAreaTable').innerText = parseFloat(areaVal).toLocaleString();
-        } else if(lineArea) {
-            lineArea.style.display = 'none';
-        }
-
-        const lineMeterPrice = document.getElementById('lineMeterPrice');
-        if(meterVal !== '' && docType !== 'شهادة ضمان') {
-            lineMeterPrice.style.display = 'block';
-            document.getElementById('prevMeterPrice').innerText = parseFloat(meterVal).toLocaleString('en', {minimumFractionDigits: 2});
-            document.getElementById('prevMeterTable').innerText = parseFloat(meterVal).toLocaleString();
-        } else if(lineMeterPrice) {
-            lineMeterPrice.style.display = 'none';
-        }
-
-        const lineExecDays = document.getElementById('lineExecDays');
-        if(execVal !== '' && docType !== 'شهادة ضمان') {
-            lineExecDays.style.display = 'block';
-            document.getElementById('prevExecDays').innerText = execVal;
-        } else if(lineExecDays) {
-            lineExecDays.style.display = 'none';
-        }
-
-        const invoiceMetaBox = document.getElementById('invoiceMetaBox');
-        const hasAnyVisibleMeta = (clientVal !== '' || clientIdVal !== '' || projectVal !== '' || locationVal !== '' || (docType === 'شهادة ضمان' && plotVal !== '') || dateVal || (areaVal !== '' && docType !== 'شهادة ضمان') || (meterVal !== '' && docType !== 'شهادة ضمان') || (execVal !== '' && docType !== 'شهادة ضمان'));
-        
-        if(hasAnyVisibleMeta) {
-            invoiceMetaBox.style.display = 'grid';
-        } else {
-            invoiceMetaBox.style.display = 'none';
-        }
-    }
-
-    function toggleDocumentFieldsUI() {
-        const docType = document.getElementById('docType').value;
-        document.getElementById('prevDocTitleBanner').innerText = docType;
-        
-        const warrantyContainer = document.getElementById('warrantyTermsContainer');
-        const financialSectionWrapper = document.getElementById('financialSectionWrapper');
-        const scopeSectionWrapper = document.getElementById('scopeSectionWrapper');
-        const paymentPreviewBox = document.getElementById('paymentTermsPreviewBox');
-        const taxGroupContainer = document.getElementById('taxGroupContainer');
-        const aiBtn = document.getElementById('aiBtn');
-
-        if (docType === 'شهادة ضمان') {
-            warrantyContainer.style.display = 'block';
-            financialSectionWrapper.style.display = 'none';
-            scopeSectionWrapper.style.display = 'none';
-            paymentPreviewBox.style.display = 'none';
-            taxGroupContainer.style.display = 'none';
-            aiBtn.style.display = 'none';
-        } else {
-            warrantyContainer.style.display = 'none';
-            financialSectionWrapper.style.display = 'block';
-            scopeSectionWrapper.style.display = 'block';
-            paymentPreviewBox.style.display = 'block';
-            taxGroupContainer.style.display = 'flex';
-            aiBtn.style.display = 'block';
-
-            updatePaymentTermsPreview();
-        }
-        updateMetaVisibility();
-    }
-
-    function updatePaymentTermsPreview() {
-        const termsInput = document.getElementById('paymentTermsInput');
-        if(!termsInput) return;
-        const termsText = termsInput.value.trim();
-        const docType = document.getElementById('docType').value;
-        const paymentPreviewBox = document.getElementById('paymentTermsPreviewBox');
-        
-        if(docType !== 'شهادة ضمان') {
-            const title = docType === 'عقد اتفاق' ? 'ثالثاً: نظام وطريقة السداد ودفعات المستحقات' : 'رابعاً: شروط الدفعات والمدة';
-            document.getElementById('paymentPreviewTitle').innerText = title;
-            const lines = termsText.split('\n').map(line => `<li>${line}</li>`).join('');
-            document.getElementById('paymentMilestonesList').innerHTML = lines;
-            paymentPreviewBox.style.display = 'block';
-        } else {
-            paymentPreviewBox.style.display = 'none';
-        }
-    }
-
-    function bindDocumentEvents() {
-        const ids = ['clientName', 'clientIdNum', 'projectName', 'projectLocation', 'plotNum', 'execDays', 'quoteDate', 'projectArea', 'meterPrice'];
-        ids.forEach(id => {
-            const el = document.getElementById(id);
-            if(el) {
-                el.addEventListener('input', () => {
-                    updateCalculations();
-                    updateMetaVisibility();
-                });
-            }
+    function renderGrid(containerId, fields) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
+        fields.forEach(f => {
+            const div = document.createElement('div');
+            div.className = 'form-group' + (f.fullWidth ? ' full-width' : '');
+            div.innerHTML = `
+                <label>${f.label}</label>
+                ${f.type === 'textarea' ? `<textarea id="${f.id}" rows="${f.rows||3}">${f.value||''}</textarea>` :
+                  f.type === 'select' ? `<select id="${f.id}" onchange="${f.onchange||''}">${f.options}</select>` :
+                  `<input type="${f.type||'text'}" id="${f.id}" value="${f.value!==undefined?f.value:''}">`}
+            `;
+            container.appendChild(div);
         });
+    }
 
-        const paymentInput = document.getElementById('paymentTermsInput');
-        if(paymentInput) {
-            paymentInput.addEventListener('input', updatePaymentTermsPreview);
-        }
+    function onDocTypeChange() { initDocForm(); updateCalculations(); }
 
-        const descInput = document.getElementById('projectDesc');
-        if(descInput) {
-            descInput.addEventListener('input', (e) => {
-                const val = e.target.value || '';
-                document.getElementById('prevTableDesc').innerText = val;
-                document.getElementById('tableItemDesc').innerText = val.split('\n')[0] || 'تنفيذ أعمال العزل';
-            });
-        }
+    function renderInputRows() {
+        const container = document.getElementById('dynamicRowsContainer');
+        container.innerHTML = '';
+        tableRowsData.forEach((row, index) => {
+            const div = document.createElement('div');
+            div.style = 'display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; gap: 8px; margin-bottom: 8px; align-items: center;';
+            div.innerHTML = `
+                <input type="text" placeholder="بيان البند والمواصفات" value="${row.desc}" oninput="updateRowData(${index}, 'desc', this.value)">
+                <input type="text" placeholder="الوحدة (م²، بند...)" value="${row.unit}" oninput="updateRowData(${index}, 'unit', this.value)">
+                <input type="number" placeholder="الكمية" value="${row.qty}" oninput="updateRowData(${index}, 'qty', this.value)">
+                <input type="number" placeholder="السعر" value="${row.price}" oninput="updateRowData(${index}, 'price', this.value)">
+                <button type="button" class="btn btn-danger" onclick="removeTableRow(${index})">حذف</button>
+            `;
+            container.appendChild(div);
+        });
+        updateCalculations();
+    }
 
-        const notesInput = document.getElementById('projectNotes');
-        if(notesInput) {
-            notesInput.addEventListener('input', (e) => {
-                const val = e.target.value.trim();
-                const notesContainer = document.getElementById('notesContainer');
-                if(val !== '') {
-                    notesContainer.style.display = 'block';
-                    document.getElementById('prevNotesText').innerText = val;
-                } else {
-                    notesContainer.style.display = 'none';
-                }
-            });
-        }
+    function addTableRow() {
+        tableRowsData.push({ desc: 'بند عمل جديد', unit: 'م²', qty: 1, price: 0 });
+        renderInputRows();
+    }
 
-        const taxCheckbox = document.getElementById('taxCheckbox');
-        if(taxCheckbox) {
-            taxCheckbox.addEventListener('change', updateCalculations);
+    function removeTableRow(index) {
+        if(tableRowsData.length > 1) {
+            tableRowsData.splice(index, 1);
+            renderInputRows();
+        } else {
+            alert('يجب أن يحتوي الجدول على بند واحد على الأقل.');
         }
+    }
+
+    function updateRowData(index, field, value) {
+        tableRowsData[index][field] = field === 'qty' || field === 'price' ? (parseFloat(value) || 0) : value;
+        updateCalculations();
     }
 
     function updateCalculations() {
-        const areaField = document.getElementById('projectArea');
-        const priceField = document.getElementById('meterPrice');
-        const taxCheckbox = document.getElementById('taxCheckbox');
+        const currency = document.getElementById('currencySymbol') ? document.getElementById('currencySymbol').value || 'ر.س' : 'ر.س';
+        document.querySelectorAll('.currLabel').forEach(el => el.innerText = currency);
+
+        const docType = document.getElementById('docType').value;
+        const includeTax = document.getElementById('taxCheckbox') ? document.getElementById('taxCheckbox').checked : true;
+        const taxRate = document.getElementById('taxRateInput') ? parseFloat(document.getElementById('taxRateInput').value) || 0 : 15;
         
-        const area = areaField && areaField.value.trim() !== '' ? parseFloat(areaField.value) : 0;
-        const meterPrice = priceField && priceField.value.trim() !== '' ? parseFloat(priceField.value) : 0;
-        const includeTax = taxCheckbox ? taxCheckbox.checked : true;
+        document.getElementById('taxRateLabel').innerText = taxRate;
 
-        const subTotal = area * meterPrice;
-        document.getElementById('subTotalText').innerText = subTotal.toLocaleString('en', {minimumFractionDigits: 2});
-        document.getElementById('subTotal').innerText = subTotal.toLocaleString('en', {minimumFractionDigits: 2}) + ' ر.س';
+        let subTotal = 0;
+        let tbodyHTML = '';
+        let tablePreviewBody = document.getElementById('previewTableBody');
 
+        if(docType !== 'شهادة ضمان') {
+            tableRowsData.forEach((row, i) => {
+                const total = row.qty * row.price;
+                subTotal += total;
+                tbodyHTML += `
+                    <tr>
+                        <td>${i+1}</td>
+                        <td>${row.desc}</td>
+                        <td>${row.unit}</td>
+                        <td>${row.qty.toLocaleString()}</td>
+                        <td>${row.price.toLocaleString()}</td>
+                        <td>${total.toLocaleString('en', {minimumFractionDigits: 2})}</td>
+                    </tr>
+                `;
+            });
+            if(tablePreviewBody) tablePreviewBody.innerHTML = tbodyHTML;
+        }
+
+        document.getElementById('subTotal').innerText = subTotal.toLocaleString('en', {minimumFractionDigits: 2});
+        
         let taxTotal = 0;
         let grandTotal = subTotal;
-
-        if (includeTax) {
-            taxTotal = subTotal * 0.15;
+        if(includeTax && docType !== 'شهادة ضمان') {
+            taxTotal = subTotal * (taxRate / 100);
             grandTotal = subTotal + taxTotal;
             document.getElementById('taxRow').style.display = 'flex';
-            document.getElementById('taxTotal').innerText = taxTotal.toLocaleString('en', {minimumFractionDigits: 2}) + ' ر.س';
+            document.getElementById('taxTotal').innerText = taxTotal.toLocaleString('en', {minimumFractionDigits: 2});
         } else {
             document.getElementById('taxRow').style.display = 'none';
         }
-
-        document.getElementById('grandTotal').innerText = grandTotal.toLocaleString('en', {minimumFractionDigits: 2}) + ' ر.س';
-        updateMetaVisibility();
+        document.getElementById('grandTotal').innerText = grandTotal.toLocaleString('en', {minimumFractionDigits: 2});
+        updateMeta();
     }
 
-    async function generateAIProposal() {
-        const areaField = document.getElementById('projectArea');
-        const area = areaField && areaField.value ? areaField.value : '250';
-        const smartText = `1- تنظيف السطح: تنظيف كامل السطح من الأتربة والشوائب لضمان جودة الالتصاق.
-2- الطبقة الأولى: تنفيذ طبقة أولى من مادة عزل الفوم بولي يوريثان.
-3- الطبقة الثانية: تنفيذ طبقة ثانية من مادة عزل الفوم لضمان التغطية والسماكة المطلوبة بمساحة ${area} متر مربع.
-4- طبقة الحماية: تنفيذ طبقة نهائية من مادة الإكريليك لحماية العزل من العوامل الجوية.
-5- يتم تقديم ضمان 10 سنوات.`;
-
-        const descInput = document.getElementById('projectDesc');
-        if(descInput) {
-            descInput.value = smartText;
-            document.getElementById('prevTableDesc').innerText = smartText;
-            document.getElementById('tableItemDesc').innerText = `تنفيذ أعمال عزل الفوم المائي والحراري`;
-        }
+    function updateMeta() {
+        const getVal = id => document.getElementById(id) ? document.getElementById(id).value.trim() : '';
         
-        alert('تم تحديث بنود العمل بالصيغة المطلوبة بنجاح!');
+        document.getElementById('prevClient').innerText = getVal('clientName');
+        document.getElementById('lineClient').style.display = getVal('clientName') ? 'block' : 'none';
+
+        document.getElementById('prevClientId').innerText = getVal('clientIdNum');
+        document.getElementById('lineClientId').style.display = getVal('clientIdNum') ? 'block' : 'none';
+
+        document.getElementById('prevProjectName').innerText = getVal('projectName');
+        document.getElementById('lineProjectName').style.display = getVal('projectName') ? 'block' : 'none';
+
+        document.getElementById('prevLocation').innerText = getVal('projectLocation');
+        document.getElementById('lineLocation').style.display = getVal('projectLocation') ? 'block' : 'none';
+
+        document.getElementById('prevDate').innerText = getVal('quoteDate').replace(/-/g, '/');
+        document.getElementById('lineDate').style.display = getVal('quoteDate') ? 'block' : 'none';
+
+        document.getElementById('prevExecDays').innerText = getVal('execDays');
+        document.getElementById('lineExecDays').style.display = getVal('execDays') ? 'block' : 'none';
+
+        const docType = getVal('docType');
+        document.getElementById('prevPlotNum').innerText = getVal('plotNum');
+        document.getElementById('linePlot').style.display = (docType === 'شهادة ضمان' && getVal('plotNum')) ? 'block' : 'none';
+        
+        document.getElementById('prevPlanNum').innerText = getVal('planNum');
+        document.getElementById('linePlan').style.display = (docType === 'شهادة ضمان' && getVal('planNum')) ? 'block' : 'none';
+
+        document.getElementById('prevTableDesc').innerText = getVal('projectDesc');
+        document.getElementById('prevWarrantyText').innerText = getVal('warrantyText');
+        
+        const notes = getVal('projectNotes');
+        document.getElementById('notesContainer').style.display = notes ? 'block' : 'none';
+        document.getElementById('prevNotesText').innerText = notes;
+    }
+
+    function toggleUI() {
+        const docType = document.getElementById('docType').value;
+        document.getElementById('prevDocTitleBanner').innerText = docType;
+        document.getElementById('warrantyTermsContainer').style.display = docType === 'شهادة ضمان' ? 'block' : 'none';
+        document.getElementById('financialSectionWrapper').style.display = docType === 'شهادة ضمان' ? 'none' : 'block';
+        document.getElementById('scopeSectionWrapper').style.display = docType === 'شهادة ضمان' ? 'none' : 'block';
+        document.getElementById('paymentTermsPreviewBox').style.display = docType === 'شهادة ضمان' ? 'none' : 'block';
+        document.getElementById('taxGroupContainer').parentElement.style.display = docType === 'شهادة ضمان' ? 'none' : 'grid';
+
+        if(docType !== 'شهادة ضمان') {
+            const terms = document.getElementById('paymentTermsInput') ? document.getElementById('paymentTermsInput').value : '';
+            document.getElementById('paymentMilestonesList').innerHTML = terms.split('\n').map(l => `<li>${l}</li>`).join('');
+        }
+    }
+
+    function bindDocEvents() {
+        ['clientName', 'clientIdNum', 'projectName', 'projectLocation', 'plotNum', 'planNum', 'execDays', 'quoteDate', 'currencySymbol'].forEach(id => {
+            const el = document.getElementById(id);
+            if(el) el.addEventListener('input', updateCalculations);
+        });
+        ['paymentTermsInput', 'projectDesc', 'warrantyText', 'projectNotes'].forEach(id => {
+            const el = document.getElementById(id);
+            if(el) el.addEventListener('input', () => { toggleUI(); updateCalculations(); });
+        });
+    }
+
+    document.getElementById('companyForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const data = {
+            name: document.getElementById('compName').value,
+            reg: document.getElementById('compReg').value,
+            activity: document.getElementById('compActivity').value,
+            city: document.getElementById('compCity').value,
+            url: document.getElementById('compUrl').value,
+            signTitle: document.getElementById('signTitleInput').value
+        };
+
+        const logoFile = document.getElementById('compLogo').files[0];
+        const stampFile = document.getElementById('compStamp').files[0];
+
+        let pending = 0;
+        const saveAll = (logo, stamp) => {
+            if(logo) data.logo = logo;
+            if(stamp) data.stamp = stamp;
+            localStorage.setItem('company_data', JSON.stringify(data));
+            loadCompanyData();
+            showMsg();
+        };
+
+        let lData = null, sData = null;
+        if(logoFile) {
+            pending++;
+            const reader = new FileReader();
+            reader.onload = e => { lData = e.target.result; pending--; if(pending===0) saveAll(lData, sData); };
+            reader.readAsDataURL(logoFile);
+        }
+        if(stampFile) {
+            pending++;
+            const reader = new FileReader();
+            reader.onload = e => { sData = e.target.result; pending--; if(pending===0) saveAll(lData, sData); };
+            reader.readAsDataURL(stampFile);
+        }
+        if(pending === 0) saveAll();
+    });
+
+    function loadCompanyData() {
+        const saved = JSON.parse(localStorage.getItem('company_data') || '{}');
+        if(saved.name) { document.getElementById('compName').value = saved.name; document.getElementById('prevCompName').innerText = saved.name; }
+        if(saved.reg) { document.getElementById('compReg').value = saved.reg; document.getElementById('prevCompReg').innerText = saved.reg; }
+        if(saved.activity) { document.getElementById('compActivity').value = saved.activity; document.getElementById('prevCompActivity').innerText = saved.activity; }
+        if(saved.city) { document.getElementById('compCity').value = saved.city; document.getElementById('prevCompCity').innerText = saved.city; }
+        if(saved.url) { 
+            document.getElementById('compUrl').value = saved.url; 
+            const lnk = document.getElementById('prevCompUrlLink'); lnk.href = saved.url; lnk.innerText = saved.url; 
+        }
+        if(saved.signTitle) { document.getElementById('signTitleInput').value = saved.signTitle; document.getElementById('prevSignTitle').innerText = saved.signTitle; }
+        if(saved.logo) { const img = document.getElementById('prevLogo'); img.src = saved.logo; img.style.display = 'block'; }
+        if(saved.stamp) { const img = document.getElementById('prevStamp'); img.src = saved.stamp; img.style.display = 'block'; }
+    }
+
+    function showMsg() {
+        const box = document.getElementById('alertBox');
+        box.style.display = 'block';
+        setTimeout(() => box.style.display = 'none', 3000);
+    }
+
+    function exportToPDF() {
+        const element = document.getElementById('printableArea');
+        const originalTransform = element.style.transform;
+        element.style.transform = 'scale(1)';
+
+        const opt = {
+            margin:       10,
+            filename:     'Contract_Proposal.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        html2pdf().from(element).set(opt).save().then(() => {
+            element.style.transform = originalTransform;
+        });
+    }
+
+    function saveProposalToHistory() {
+        const client = document.getElementById('clientName') ? document.getElementById('clientName').value : 'عميل عام';
+        const type = document.getElementById('docType').value;
+        const date = new Date().toLocaleDateString('ar-EG');
+        
+        let history = JSON.parse(localStorage.getItem('proposals_history') || '[]');
+        history.push({ client, type, date });
+        localStorage.setItem('proposals_history', JSON.stringify(history));
+        loadHistory();
+        alert('تم حفظ العرض في الأرشيف بنجاح!');
+    }
+
+    function loadHistory() {
+        const history = JSON.parse(localStorage.getItem('proposals_history') || '[]');
+        const listContainer = document.getElementById('historyList');
+        if(history.length === 0) {
+            listContainer.innerHTML = 'لا توجد مستندات محفوظة حتى الآن.';
+            return;
+        }
+        listContainer.innerHTML = history.map((item, idx) => `
+            <div style="display: flex; justify-content: space-between; background: #fff; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; margin-bottom: 6px;">
+                <span><strong>${idx+1}. العميل:</strong> ${item.client} (${item.type})</span>
+                <span><strong>التاريخ:</strong> ${item.date}</span>
+            </div>
+        `).join('');
     }
 </script>
 
