@@ -118,7 +118,6 @@
 
         .invoice-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 30px; border-top: 1px solid #e2e8f0; padding-top: 15px; }
         .stamp-preview { max-width: 90px; max-height: 90px; object-fit: contain; }
-        .creator-watermark { text-align: center; margin-top: 20px; padding-top: 10px; border-top: 1px dashed #cbd5e1; font-size: 11px; color: #64748b; }
 
         /* Toast Notifications & Loading */
         #toast {
@@ -138,11 +137,6 @@
     <div id="toast">رسالة التنبيه</div>
 
     <div class="container">
-        <div style="text-align: center; padding: 8px; font-size: 12px; font-weight: bold; color: var(--primary); background: #e0f2fe; border-radius: 8px; margin-bottom: 10px;">
-            <div>Created by Eng. Mohamed Abu El-Kheir</div>
-            <div>تم الإنشاء بواسطة المهندس / محمد أبو الخير</div>
-        </div>
-
         <header>
             <h1>منصة إدارة المقاولات وعروض الأسعار الذكية</h1>
             <p>أنشئ مستندك مباشرة (عرض سعر، عقد، شهادة ضمان) وسيقوم النظام بربطه بمؤسستك تلقائياً</p>
@@ -295,11 +289,6 @@
                             <img id="prevStamp" class="stamp-preview" src="" alt="ختم المؤسسة" style="display:none;">
                         </div>
                     </div>
-
-                    <div class="creator-watermark">
-                        <div>Created by Eng. Mohamed Abu El-Kheir</div>
-                        <div>تم الإنشاء بواسطة المهندس / محمد أبو الخير</div>
-                    </div>
                 </div>
             </div>
 
@@ -349,7 +338,6 @@
             setTimeout(() => t.style.display = 'none', 3000);
         }
 
-        // توليد معرف فريد للمؤسسة بناءً على اسمها وسجلها التجاري المدخلين في حقول المستند
         function getComputedCompanyKey() {
             const name = document.getElementById('compName') ? document.getElementById('compName').value.trim() : '';
             const reg = document.getElementById('compReg') ? document.getElementById('compReg').value.trim() : '';
@@ -422,7 +410,7 @@
                 { label: 'رقم السجل التجاري', id: 'compReg' },
                 { label: 'نشاط الشركة / التخصصات', id: 'compActivity' },
                 { label: 'المدينة / الفرع', id: 'compCity' },
-                { label: 'مسؤول التوقيع', id: 'signTitleInput', value: 'معتمد من الإدارة والمشرف العام' },
+                { label: 'مسؤول التوقيع (مثل: المدير العام / مدير المبيعات)', id: 'signTitleInput', value: 'معتمد من الإدارة والمشرف العام' },
                 { label: 'شعار الشركة (Logo)', id: 'compLogo', type: 'file' },
                 { label: 'ختم المؤسسة', id: 'compStamp', type: 'file' }
             ];
@@ -435,7 +423,6 @@
                 container.appendChild(div);
             });
 
-            // ربط تحديث الحية للمعاينة عند الكتابة
             document.getElementById('compName').addEventListener('input', () => { document.getElementById('prevCompName').innerText = document.getElementById('compName').value || 'اسم المؤسسة'; });
             document.getElementById('compReg').addEventListener('input', () => { document.getElementById('prevCompReg').innerText = document.getElementById('compReg').value || '---'; });
             document.getElementById('compActivity').addEventListener('input', () => { document.getElementById('prevCompActivity').innerText = document.getElementById('compActivity').value || '---'; });
@@ -639,7 +626,6 @@
             });
         }
 
-        // حفظ المستند وربطه آلياً ببيانات المؤسسة وسجلها التجاري
         window.saveDocumentToCloud = async function() {
             const companyKey = getComputedCompanyKey();
             if(!companyKey) {
@@ -689,10 +675,8 @@
                     });
                 }
 
-                // حفظ أو تحديث سجل المؤسسة الأساسي سحابياً
                 await setDoc(doc(db, "companies", companyKey), compData, { merge: true });
 
-                // حفظ المستند وربطه بـ companyKey الخاص بالمؤسسة
                 const docData = {
                     companyKey: companyKey,
                     docNumber: docIdNum,
