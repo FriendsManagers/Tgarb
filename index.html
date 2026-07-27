@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منصة إدارة المقاولات وعروض الأسعار الذكية</title>
-    <!-- مكتبة تصدير PDF حقيقية -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
@@ -71,10 +70,7 @@
         .btn-danger:hover { background-color: #dc2626; }
         .btn-action { background: linear-gradient(135deg, #f59e0b, #d97706); margin-top: 10px; }
         .btn-action:hover { background: linear-gradient(135deg, #d97706, #b45309); }
-        .btn-secondary { background-color: #475569; }
-        .btn-secondary:hover { background-color: #334155; }
 
-        /* لوحة التوقيع الإلكتروني */
         .signature-pad-container { border: 2px dashed var(--border-color); border-radius: 8px; background: #fff; position: relative; margin-top: 5px; overflow: hidden; }
         canvas#sigCanvas { width: 100%; height: 120px; touch-action: none; cursor: crosshair; display: block; }
         .sig-preview { max-width: 120px; max-height: 60px; object-fit: contain; display: none; }
@@ -119,7 +115,6 @@
         .invoice-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 30px; border-top: 1px solid #e2e8f0; padding-top: 15px; }
         .stamp-preview { max-width: 90px; max-height: 90px; object-fit: contain; }
 
-        /* Toast Notifications & Loading */
         #toast {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff;
             padding: 12px 24px; border-radius: 8px; font-size: 14px; z-index: 9999; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
@@ -139,10 +134,10 @@
     <div class="container">
         <header>
             <h1>منصة إدارة المقاولات وعروض الأسعار الذكية</h1>
-            <p>أنشئ مستندك مباشرة (عرض سعر، عقد، شهادة ضمان) وسيقوم النظام بربطه بمؤسستك تلقائياً</p>
+            <p>سجل بيانات مؤسستك لترتبط برقم فريد في قاعدة البيانات، مع تخزين الصور محلياً بدون أي تكاليف</p>
         </header>
 
-        <!-- بيانات المؤسسة والمستند في نموذج واحد مباشر -->
+        <!-- بيانات المؤسسة والمستند -->
         <div class="card">
             <h2>بيانات المؤسسة المصدرة للمستند</h2>
             <div class="form-grid" id="companyGrid"></div>
@@ -210,7 +205,7 @@
 
                     <div class="invoice-meta" id="invoiceMetaBox">
                         <div style="display: flex; flex-direction: column; gap: 4px;">
-                            <p id="lineClient" style="display:none;"><strong>مقدم إلى السيد:</strong> <span id="prevClient"></span> المحترم،</p>
+                            <p id="lineClient" style="display:none;"><strong>مقدم إلى السيد/ة:</strong> <span id="prevClient"></span> المحترم/ة،</p>
                             <p id="lineClientId" style="display:none;"><strong>رقم الهوية:</strong> <span id="prevClientId"></span></p>
                             <p id="lineProjectName" style="display:none;"><strong>المشروع:</strong> <span id="prevProjectName"></span></p>
                             <p id="lineLocation" style="display:none;"><strong>الموقع:</strong> <span id="prevLocation"></span></p>
@@ -307,11 +302,10 @@
         </div>
     </div>
 
-    <!-- سكربت Firebase والمنطق البرمجي -->
+    <!-- سكربت Firebase ومنطق التخزين المحلي للصور -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
         import { getFirestore, doc, setDoc, collection, addDoc, getDocs, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
-        import { getStorage, ref, uploadString, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-storage.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBREVVtMzKhwi0xAUWO2dTvLMz0UucEs3E",
@@ -324,10 +318,9 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const storage = getStorage(app);
 
         let currentZoom = 0.55;
-        let tableRowsData = [{ desc: 'تنفيذ أعمال عزل الأسطح المتفق عليها', unit: 'م²', qty: 100, price: 40 }];
+        let tableRowsData = [{ desc: 'تنفيذ أعمال العزل المتفق عليها', unit: 'م²', qty: 100, price: 40 }];
         let canvas, ctx, isDrawing = false;
         let allCloudDocuments = [];
 
@@ -335,7 +328,7 @@
         function showToast(msg) {
             const t = document.getElementById('toast');
             t.innerText = msg; t.style.display = 'block';
-            setTimeout(() => t.style.display = 'none', 3000);
+            setTimeout(() => t.style.display = 'none', 3500);
         }
 
         function getComputedCompanyKey() {
@@ -353,6 +346,7 @@
             initSignaturePad();
             updateCalculations();
             resetZoom();
+            loadImagesFromLocalStorage();
         });
 
         function initSignaturePad() {
@@ -410,9 +404,9 @@
                 { label: 'رقم السجل التجاري', id: 'compReg' },
                 { label: 'نشاط الشركة / التخصصات', id: 'compActivity' },
                 { label: 'المدينة / الفرع', id: 'compCity' },
-                { label: 'مسؤول التوقيع (مثل: المدير العام / مدير المبيعات)', id: 'signTitleInput', value: 'معتمد من الإدارة والمشرف العام' },
-                { label: 'شعار الشركة (Logo)', id: 'compLogo', type: 'file' },
-                { label: 'ختم المؤسسة', id: 'compStamp', type: 'file' }
+                { label: 'مسؤول التوقيع (مثل: المدير العام / المشرف العام)', id: 'signTitleInput', value: 'معتمد من الإدارة والمشرف العام' },
+                { label: 'شعار الشركة (Logo - محلي مجاني)', id: 'compLogo', type: 'file' },
+                { label: 'ختم المؤسسة (محلي مجاني)', id: 'compStamp', type: 'file' }
             ];
             const container = document.getElementById('companyGrid');
             container.innerHTML = '';
@@ -429,13 +423,16 @@
             document.getElementById('compCity').addEventListener('input', () => { document.getElementById('prevCompCity').innerText = document.getElementById('compCity').value || '---'; });
             document.getElementById('signTitleInput').addEventListener('input', () => { document.getElementById('prevSignTitle').innerText = document.getElementById('signTitleInput').value || '---'; });
 
+            // تخزين الصور محلياً في المتصفح لتوفير التكاليف تماماً
             document.getElementById('compLogo').addEventListener('change', e => {
                 const file = e.target.files[0];
                 if(file) {
                     const reader = new FileReader();
                     reader.onload = ev => {
+                        const base64Data = ev.target.result;
+                        localStorage.setItem('local_comp_logo', base64Data);
                         const img = document.getElementById('prevLogo');
-                        img.src = ev.target.result;
+                        img.src = base64Data;
                         img.style.display = 'block';
                     };
                     reader.readAsDataURL(file);
@@ -447,13 +444,30 @@
                 if(file) {
                     const reader = new FileReader();
                     reader.onload = ev => {
+                        const base64Data = ev.target.result;
+                        localStorage.setItem('local_comp_stamp', base64Data);
                         const img = document.getElementById('prevStamp');
-                        img.src = ev.target.result;
+                        img.src = base64Data;
                         img.style.display = 'block';
                     };
                     reader.readAsDataURL(file);
                 }
             });
+        }
+
+        function loadImagesFromLocalStorage() {
+            const savedLogo = localStorage.getItem('local_comp_logo');
+            if(savedLogo) {
+                const img = document.getElementById('prevLogo');
+                img.src = savedLogo;
+                img.style.display = 'block';
+            }
+            const savedStamp = localStorage.getItem('local_comp_stamp');
+            if(savedStamp) {
+                const img = document.getElementById('prevStamp');
+                img.src = savedStamp;
+                img.style.display = 'block';
+            }
         }
 
         function initDocForm() {
@@ -626,6 +640,7 @@
             });
         }
 
+        // حفظ بيانات المؤسسة والمستند نصياً في فايربيس (لحساب المستخدمين والشركات بدقة وبدون أي تكلفة)
         window.saveDocumentToCloud = async function() {
             const companyKey = getComputedCompanyKey();
             if(!companyKey) {
@@ -643,38 +658,11 @@
                     reg: document.getElementById('compReg').value,
                     activity: document.getElementById('compActivity').value,
                     city: document.getElementById('compCity').value,
-                    signTitle: document.getElementById('signTitleInput').value
+                    signTitle: document.getElementById('signTitleInput').value,
+                    updatedAt: new Date().toISOString()
                 };
 
-                const logoFile = document.getElementById('compLogo').files[0];
-                const stampFile = document.getElementById('compStamp').files[0];
-
-                if(logoFile) {
-                    const logoRef = ref(storage, `companies/${companyKey}/logo.jpg`);
-                    const reader = new FileReader();
-                    await new Promise((resolve) => {
-                        reader.onload = async (e) => {
-                            await uploadString(logoRef, e.target.result, 'data_url');
-                            compData.logoUrl = await getDownloadURL(logoRef);
-                            resolve();
-                        };
-                        reader.readAsDataURL(logoFile);
-                    });
-                }
-
-                if(stampFile) {
-                    const stampRef = ref(storage, `companies/${companyKey}/stamp.jpg`);
-                    const reader = new FileReader();
-                    await new Promise((resolve) => {
-                        reader.onload = async (e) => {
-                            await uploadString(stampRef, e.target.result, 'data_url');
-                            compData.stampUrl = await getDownloadURL(stampRef);
-                            resolve();
-                        };
-                        reader.readAsDataURL(stampFile);
-                    });
-                }
-
+                // حفظ بيانات المؤسسة كمستند فريد باسمها وسجلها لكي يظهر لك عدد المستخدمين/الشركات في فايربيس
                 await setDoc(doc(db, "companies", companyKey), compData, { merge: true });
 
                 const docData = {
@@ -693,19 +681,20 @@
                 };
 
                 await addDoc(collection(db, "documents"), docData);
-                showToast(`تم حفظ المستند بنجاح وربطه بالمؤسسة برقم: ${docIdNum}`);
+                showLoading(false);
+                showToast(`تم حفظ المستند بنجاح برقم: ${docIdNum}`);
                 await window.loadCloudArchive();
             } catch(err) {
-                showToast('خطأ: ' + err.message);
-            } finally {
                 showLoading(false);
+                showToast('خطأ أثناء الحفظ: ' + err.message);
+                console.error(err);
             }
         };
 
         window.loadCloudArchive = async function() {
             const companyKey = getComputedCompanyKey();
             if(!companyKey) {
-                showToast('الرجاء إدخال اسم المؤسسة ورقم السجل التجاري أولاً لجلب أرشيفها.');
+                showToast('الرجاء إدخال اسم المؤسسة ورقم السجل التجاري أولاً.');
                 return;
             }
 
@@ -718,11 +707,11 @@
                     allCloudDocuments.push({ id: docSnap.id, ...docSnap.data() });
                 });
                 renderArchive(allCloudDocuments);
-                showToast(`تم العثور على ${allCloudDocuments.length} مستند لهذه المؤسسة.`);
-            } catch(err) {
-                showToast('خطأ في جلب الأرشيف: ' + err.message);
-            } finally {
                 showLoading(false);
+                showToast(`تم العثور على ${allCloudDocuments.length} مستند.`);
+            } catch(err) {
+                showLoading(false);
+                showToast('خطأ في جلب الأرشيف: ' + err.message);
             }
         };
 
@@ -748,12 +737,12 @@
                 showLoading(true);
                 try {
                     await deleteDoc(doc(db, "documents", id));
+                    showLoading(false);
                     showToast('تم الحذف بنجاح');
                     await window.loadCloudArchive();
                 } catch(err) {
-                    showToast('خطأ في الحذف');
-                } finally {
                     showLoading(false);
+                    showToast('خطأ في الحذف');
                 }
             }
         };
